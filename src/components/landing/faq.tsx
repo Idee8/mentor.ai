@@ -20,7 +20,11 @@ export function Faq() {
             <AccordionTrigger>
               Which AI models does Mentor use?
             </AccordionTrigger>
-            <AccordionContent></AccordionContent>
+            <AccordionContent>
+              We plan to currently use latest AI models. We support Anthropic,
+              OpenAI and Google models out of the box. For reasoning models we
+              only support DeepSeek R1.
+            </AccordionContent>
           </AccordionItem>
 
           <AccordionItem value="item-2">
