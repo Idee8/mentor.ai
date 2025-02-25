@@ -52,6 +52,31 @@ export default function Home() {
             <Button className="rounded-lg" size={"lg"}>
               Early Access - it's free
             </Button>
+
+            <div className="flex gap-4 items-center sm:h-10 mt-4 cursor-pointer">
+              <div className="flex items-center justify-center -space-x-2">
+                {[
+                  "/avatars/avatar-0.jpeg",
+                  "/avatars/avatar-1.jpg",
+                  "/avatars/avatar-2.jpeg",
+                ].map((avatar, idx) => (
+                  <div
+                    key={avatar}
+                    className="relative inline-block h-8 w-8 rounded-full border-2 border-background bg-neutral-300"
+                    style={{ zIndex: 4 - idx }}
+                  >
+                    <img
+                      src={avatar}
+                      alt={`User ${idx}`}
+                      className="h-full w-full rounded-full object-cover"
+                    />
+                  </div>
+                ))}
+              </div>
+              <span className="text-sm text-muted-foreground">
+                Join 1,000+ developers
+              </span>
+            </div>
           </div>
         </div>
       </div>

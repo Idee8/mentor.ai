@@ -2,13 +2,16 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Hexagon, Menu, X } from "lucide-react";
+import { Hexagon, Menu } from "lucide-react";
+
 import { Button } from "./ui/button";
-import { cn } from "@/lib/utils";
 import { MobileMenu } from "./mobile-menu";
+import { useScroll } from "@/hooks/use-scroll";
+import { cn } from "@/lib/utils";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const scrolled = useScroll(50);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -17,7 +20,12 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="w-full shadow sticky top-0 z-50 bg-background">
+    <nav
+      className={cn(
+        "w-full shadow sticky top-0 z-50 bg-background",
+        scrolled && "bg-background backdrop-blur border-b border-neutral-800/30"
+      )}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex-shrink-0">
