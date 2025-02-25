@@ -8,9 +8,9 @@ import { Button } from "@/components/ui/button";
 export default function Home() {
   return (
     <div>
-      <div className="relative mx-auto mt-8 w-full max-w-screen-lg bg-neutral-800/40 overflow-hidden rounded-2xl  p-6 text-center sm:p-12 sm:px-0">
+      <div className="relative mx-auto mt-8 w-full max-w-screen-lg bg-neutral-800/40 overflow-hidden sm:rounded-2xl rounded-lg  p-6 text-center sm:p-12 sm:px-0">
         <SvgGrid />
-        <div className="max-w-4xl flex flex-col items-center mx-auto p-8 space-y-8 mt-9">
+        <div className="max-w-4xl flex flex-col items-center mx-auto md:p-8 py-8 px-2 space-y-8 mt-9">
           <Link
             href={"/manifesto"}
             className="group flex divide-neutral-500 rounded-full border border-neutral-500 bg-neutral-800 text-xs font-medium drop-shadow-sm transition-colors duration-75 hover:bg-neutral-700 sm:divide-x animate-slide-up-fade [--offset:10px] [animation-delay:0ms] [animation-duration:1s] [animation-fill-mode:both] motion-reduce:animate-fade-in"
@@ -25,7 +25,7 @@ export default function Home() {
               </div>
             </span>
           </Link>
-          <h1 className="flex flex-col items-center text-foreground font-serif font-medium text-6xl">
+          <h1 className="flex flex-col items-center text-foreground font-serif font-medium md:text-6xl text-4xl">
             <span>
               <BlurText
                 text="Meet Your Intelligent"
@@ -43,7 +43,7 @@ export default function Home() {
               />
             </span>
           </h1>
-          <p className="max-w-lg text-center font-medium text-foreground">
+          <p className="md:max-w-lg text-center font-medium sm:text-base text-sm text-foreground">
             The AI-powered workspace to mentor you on any codebase hosted on
             Github and document all your learning for future use.
           </p>

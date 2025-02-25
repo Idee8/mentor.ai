@@ -1,14 +1,23 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
-import { Hexagon } from "lucide-react";
-
+import { Hexagon, Menu, X } from "lucide-react";
 import { Button } from "./ui/button";
+import { cn } from "@/lib/utils";
+import { MobileMenu } from "./mobile-menu";
 
 const Navbar = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+    // prevent scrolling when menu is open
+    document.body.style.overflow = isOpen ? "unset" : "hidden";
+  };
+
   return (
-    <nav className="w-full shadow sticky top-0 z-50">
+    <nav className="w-full shadow sticky top-0 z-50 bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex-shrink-0">
@@ -30,14 +39,30 @@ const Navbar = () => {
             </div>
           </div>
 
-          <div className="flex items-center space-x-4">
-            <Link href="/login" className="text-muted-foreground">
+          <div className="sm:flex items-center space-x-4 hidden">
+            <Link
+              href="/login"
+              className="text-muted-foreground hover:text-foreground transition-colors"
+            >
               Login
             </Link>
             <Button className="rounded-md">Sign Up</Button>
           </div>
+
+          <button
+            className="sm:hidden block bg-card"
+            onClick={toggleMenu}
+            aria-label={isOpen ? "Close menu" : "Open menu"}
+          >
+            <Menu
+              size={24}
+              className="transform transition-transform duration-200 ease-in-out"
+            />
+          </button>
         </div>
       </div>
+
+      <MobileMenu isOpen={isOpen} toggleMenu={toggleMenu} />
     </nav>
   );
 };
@@ -47,7 +72,10 @@ const NavbarLink: React.FC<{
   label: string;
 }> = ({ href, label }) => {
   return (
-    <Link href={href} className="px-3 py-2 hover:text-muted-foreground">
+    <Link
+      href={href}
+      className="px-3 py-2 hover:text-muted-foreground transition-colors"
+    >
       {label}
     </Link>
   );
