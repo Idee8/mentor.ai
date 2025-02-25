@@ -2,8 +2,11 @@ import { NotebookText, Telescope } from "lucide-react";
 
 export function Features() {
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="flex flex-col items-center gap-4">
+    <div
+      className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 my-8"
+      id="features"
+    >
+      <div className="flex flex-col items-center gap-4 mb-6">
         <p className="uppercase text-primary">Powerful features</p>
         <h2 className="sm:text-5xl text-4xl font-serif text-balance text-center">
           Document, Understand, and Explore

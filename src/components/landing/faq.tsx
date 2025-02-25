@@ -10,7 +10,10 @@ import {
 
 export function Faq() {
   return (
-    <div className="max-w-5xl mx-auto flex flex-col sm:flex-row sm:gap-20 justify-between px-10 sm:px-20 lg:px-8 py-12">
+    <div
+      className="max-w-5xl mx-auto flex flex-col sm:flex-row sm:gap-20 justify-between px-10 sm:px-14 lg:px-8 py-12"
+      id="faq"
+    >
       <h2 className="flex flex-col text-3xl">
         Frequently <span>Asked</span> <span>Questions</span>
       </h2>
