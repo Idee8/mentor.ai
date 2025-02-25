@@ -22,7 +22,7 @@ const Navbar = () => {
   return (
     <nav
       className={cn(
-        "w-full shadow sticky top-0 z-50 bg-background",
+        "w-full shadow sticky top-0 z-30 bg-background",
         scrolled && "bg-muted/30 backdrop-blur border-b border-neutral-800"
       )}
     >
@@ -40,8 +40,8 @@ const Navbar = () => {
 
           <div className="hidden md:block">
             <div className="ml-10 flex items-center space-x-4">
-              <NavbarLink label="Features" href="/features" />
-              <NavbarLink label="Entreprise" href="/entreprise" />
+              <NavbarLink label="Features" href="/#features" />
+              <NavbarLink label="FAQ" href="/#faq" />
               <NavbarLink label="About" href="/about" />
               <NavbarLink label="Changelog" href="/changelog" />
             </div>

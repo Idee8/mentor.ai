@@ -22,13 +22,13 @@ export default function Footer() {
             Accelerating engineering mentorship.
           </h2>
           <div className="flex gap-3 mt-4">
-            <Link href={`https://github.com/idee8/mentor.ai`} target="_blank">
+            <Link href={`https://github.com/Idee8/mentor.ai`} target="_blank">
               <Github />
             </Link>
-            <Link href={`https://twitter.com/idee8`} target="_blank">
+            <Link href={`https://x.com/Idee8agency`} target="_blank">
               <Twitter />
             </Link>
-            <Link href={`https://discord.gg/idee8`} target="_blank">
+            <Link href={`https://discord.gg/EB9XcReV`} target="_blank">
               <Discord />
             </Link>
           </div>
