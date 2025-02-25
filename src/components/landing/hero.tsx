@@ -10,7 +10,7 @@ export function Hero() {
       <SvgGrid />
       <div className="max-w-4xl flex flex-col items-center mx-auto md:p-8 py-8 px-2 space-y-8 mt-9">
         <Link
-          href={"/manifesto"}
+          href={"/docs/manifesto"}
           className="group flex divide-neutral-500 rounded-full border border-neutral-500 bg-neutral-800 text-xs font-medium drop-shadow-sm transition-colors duration-75 hover:bg-neutral-700 sm:divide-x animate-slide-up-fade [--offset:10px] [animation-delay:0ms] [animation-duration:1s] [animation-fill-mode:both] motion-reduce:animate-fade-in"
         >
           <span className="py-1.5 pl-4 text-foreground sm:pr-2.5">
