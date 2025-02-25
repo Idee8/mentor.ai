@@ -23,7 +23,7 @@ const Navbar = () => {
     <nav
       className={cn(
         "w-full shadow sticky top-0 z-50 bg-background",
-        scrolled && "bg-background backdrop-blur border-b border-neutral-800/30"
+        scrolled && "bg-muted/30 backdrop-blur border-b border-neutral-800"
       )}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

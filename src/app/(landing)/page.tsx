@@ -80,6 +80,70 @@ export default function Home() {
           </div>
         </div>
       </div>
+      <div>
+        <div className="max-w-4xl mx-auto flex flex-col items-center py-8 px-2 space-y-8 mt-9">
+          <h2 className="text-foreground font-serif font-medium md:text-4xl text-3xl">
+            <span>
+              <BlurText
+                text="How it Works"
+                delay={150}
+                animateBy="words"
+                direction="top"
+              />
+            </span>
+          </h2>
+          <div className="flex flex-col items-center space-y-8">
+            <div className="flex flex-col items-center space-y-4">
+              <h3 className="text-foreground font-serif font-medium md:text-2xl text-xl">
+                <span>
+                  <BlurText
+                    text="1. Connect your Github"
+                    delay={150}
+                    animateBy="words"
+                    direction="top"
+                  />
+                </span>
+              </h3>
+              <p className="text-center font-medium text-foreground">
+                Connect your Github account to mentor and start learning from
+                your codebase.
+              </p>
+            </div>
+            <div className="flex flex-col items-center space-y-4">
+              <h3 className="text-foreground font-serif font-medium md:text-2xl text-xl">
+                <span>
+                  <BlurText
+                    text="2. Start Learning"
+                    delay={150}
+                    animateBy="words"
+                    direction="top"
+                  />
+                </span>
+              </h3>
+              <p className="text-center font-medium text-foreground">
+                Mentor will analyze your codebase and provide you with
+                suggestions to improve your code.
+              </p>
+            </div>
+            <div className="flex flex-col items-center space-y-4">
+              <h3 className="text-foreground font-serif font-medium md:text-2xl text-xl">
+                <span>
+                  <BlurText
+                    text="3. Document your Learning"
+                    delay={150}
+                    animateBy="words"
+                    direction="top"
+                  />
+                </span>
+              </h3>
+              <p className="text-center font-medium text-foreground">
+                Document your learning and share it with your team or the
+                community.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
