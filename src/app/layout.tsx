@@ -18,7 +18,7 @@ const ebGaramond = EB_Garamond({
 });
 
 export const metadata: Metadata = {
-  title: "Code Mentor",
+  title: "Mentor AI",
   description: "AI Code Mentor on any codebase",
 };
 
