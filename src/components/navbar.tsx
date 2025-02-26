@@ -42,7 +42,7 @@ const Navbar = () => {
             <div className="ml-10 flex items-center space-x-4">
               <NavbarLink label="Features" href="/#features" />
               <NavbarLink label="FAQ" href="/#faq" />
-              <NavbarLink label="About" href="/about" />
+              <NavbarLink label="About" href="/docs/manifesto" />
               <NavbarLink label="Changelog" href="/changelog" />
             </div>
           </div>
