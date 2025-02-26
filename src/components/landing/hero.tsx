@@ -81,7 +81,7 @@ export function Hero() {
               ))}
             </div>
             <span className="text-sm text-muted-foreground">
-              Join 1,000+ developers
+              Join 1,232+ developers
             </span>
           </div>
         </div>
