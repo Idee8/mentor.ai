@@ -7,11 +7,20 @@ import {
   useMemo,
   useState,
 } from "react";
+import useSWRMutation from "swr/mutation";
+import { toast } from "sonner";
 
 import { Modal } from "../ui/modal";
 import { Hexagon } from "lucide-react";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
+
+async function sendRequest(url: string, { arg }: { arg: { email: string } }) {
+  return fetch(url, {
+    method: "POST",
+    body: JSON.stringify(arg),
+  }).then((res) => res.json());
+}
 
 const RequestAccessModal = ({
   setShowRequestAccessModal,
@@ -20,6 +29,26 @@ const RequestAccessModal = ({
   showRequestAccessModal: boolean;
   setShowRequestAccessModal: Dispatch<SetStateAction<boolean>>;
 }) => {
+  const [email, setEmail] = useState("");
+  const { trigger, isMutating } = useSWRMutation(
+    "/api/request-access",
+    sendRequest,
+    {
+      onError: (error) => {
+        console.log(error);
+        toast("Something went wrong!");
+      },
+      onSuccess: (data) => {
+        if (data.message) {
+          toast(data.message);
+        } else {
+          toast("Check your inbox! You have joined the waitlist.");
+        }
+        setShowRequestAccessModal(false);
+      },
+    }
+  );
+
   return (
     <Modal
       showModal={showRequestAccessModal}
@@ -37,8 +66,12 @@ const RequestAccessModal = ({
             type="email"
             placeholder="Enter your email"
             className="w-full"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
-          <Button>Join now!</Button>
+          <Button disabled={isMutating} onClick={() => trigger({ email })}>
+            Join now!
+          </Button>
         </div>
       </div>
     </Modal>

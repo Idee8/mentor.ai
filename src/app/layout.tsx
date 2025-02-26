@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Geist_Mono, EB_Garamond } from "next/font/google";
+import { Toaster } from "sonner";
+
 import "./globals.css";
 
 const interSans = Inter({
@@ -32,6 +34,7 @@ export default function RootLayout({
       <body
         className={`${interSans.variable} ${ebGaramond.variable} ${geistMono.variable} antialiased font-sans`}
       >
+        <Toaster />
         {children}
       </body>
     </html>
