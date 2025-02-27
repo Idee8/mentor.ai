@@ -1,1 +1,1 @@
-export * from "./request-access-modal";
+export * from './request-access-modal';

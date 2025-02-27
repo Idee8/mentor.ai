@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import Link from "next/link";
+import Link from 'next/link';
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "../ui/accordion";
+} from '../ui/accordion';
 
 export function Faq() {
   return (
@@ -43,13 +43,13 @@ export function Faq() {
             <AccordionContent>
               At Mentor AI, we take data privacy very seriously and implement
               state-of-the-art security measures to protect your data. You can
-              learn more about{" "}
+              learn more about{' '}
               <Link
-                href={"/docs/privacy"}
+                href={'/docs/privacy'}
                 className="underline text-foreground"
               >
                 our data privacy policies
-              </Link>{" "}
+              </Link>{' '}
               .
             </AccordionContent>
           </AccordionItem>
@@ -68,13 +68,13 @@ export function Faq() {
             </AccordionTrigger>
             <AccordionContent>
               Sure, we're happy to answer any questions you might have. Just
-              shoot us an email at{" "}
+              shoot us an email at{' '}
               <Link
-                href={"mailto:hi@idee8.agency"}
+                href={'mailto:hi@idee8.agency'}
                 className="underline text-foreground"
               >
                 hi@idee8.agency
-              </Link>{" "}
+              </Link>{' '}
               and we'll get back to you as soon as possible.
             </AccordionContent>
           </AccordionItem>

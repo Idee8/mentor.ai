@@ -1,5 +1,5 @@
-import { Button } from "../ui/button";
-import { SvgGrid } from "./grid";
+import { Button } from '../ui/button';
+import { SvgGrid } from './grid';
 
 export function CTA({
   description,
@@ -21,8 +21,8 @@ export function CTA({
         </h2>
         <p className="text-center">{description}</p>
         <div className="space-x-3">
-          <Button size={"lg"}>{primaryActionText}</Button>
-          <Button size={"lg"} variant={"ghost"}>
+          <Button size={'lg'}>{primaryActionText}</Button>
+          <Button size={'lg'} variant={'ghost'}>
             {secondaryActionText}
           </Button>
         </div>

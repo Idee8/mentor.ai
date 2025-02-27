@@ -1,31 +1,31 @@
-"use client";
+'use client';
 
-import React, { useEffect, useRef, useState } from "react";
-import { Marquee } from "../ui/marquee";
-import Image from "next/image";
+import React from 'react';
+import Image from 'next/image';
 
-// Sample partner data - with images from public folder
+import { Marquee } from '../ui/marquee';
+
 const partners = [
   {
     id: 1,
-    name: "MIT",
-    image: "/users/mit.png",
+    name: 'MIT',
+    image: '/users/mit.png',
   },
   {
     id: 2,
-    name: "General-mills",
-    image: "/users/General-mills.svg",
-    industry: "Finance",
+    name: 'General-mills',
+    image: '/users/General-mills.svg',
+    industry: 'Finance',
   },
   {
     id: 4,
-    name: "Stanford University",
-    image: "/users/stanford.png",
+    name: 'Stanford University',
+    image: '/users/stanford.png',
   },
   {
     id: 5,
-    name: "Mercado Libre",
-    image: "/users/mercado_libre.svg",
+    name: 'Mercado Libre',
+    image: '/users/mercado_libre.svg',
   },
 ];
 
@@ -38,8 +38,8 @@ export const Partners: React.FC = () => {
         </h2>
       </div>
       <Marquee pauseOnHover className="[--duration:20s]">
-        {partners.map((partner, idx) => (
-          <div key={idx} className="mx-12">
+        {partners.map((partner) => (
+          <div key={partner.id} className="mx-12">
             <Image
               src={partner.image}
               alt={partner.name}

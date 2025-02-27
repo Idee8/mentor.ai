@@ -1,52 +1,52 @@
-"use client";
+'use client';
 const testimonials = [
   {
-    name: "Alex Carter",
-    username: "alexdev",
-    avatar: "/avatars/avatar-3.jpg",
+    name: 'Alex Carter',
+    username: 'alexdev',
+    avatar: '/avatars/avatar-3.jpg',
     text: [
-      "Mentor AI has completely changed the way I learn to code. It provides clear explanations, real-time feedback, and even suggests best practices tailored to my coding style.",
-      "I used to spend hours searching Stack Overflow, but now I get instant, AI-powered insights that help me write cleaner, more efficient code.",
+      'Mentor AI has completely changed the way I learn to code. It provides clear explanations, real-time feedback, and even suggests best practices tailored to my coding style.',
+      'I used to spend hours searching Stack Overflow, but now I get instant, AI-powered insights that help me write cleaner, more efficient code.',
     ],
   },
   {
-    name: "Daniel Kim",
-    username: "danielk_dev",
-    avatar: "/avatars/avatar-7.jpg",
+    name: 'Daniel Kim',
+    username: 'danielk_dev',
+    avatar: '/avatars/avatar-7.jpg',
     text: [
-      "Mentor AI is the perfect coding companion. It not only helps me fix bugs but also explains concepts in a way that makes them easy to understand.",
-      "My productivity has skyrocketed since using it—no more endless Googling for solutions. It’s like having a senior dev right by my side!",
+      'Mentor AI is the perfect coding companion. It not only helps me fix bugs but also explains concepts in a way that makes them easy to understand.',
+      'My productivity has skyrocketed since using it—no more endless Googling for solutions. It’s like having a senior dev right by my side!',
     ],
   },
   {
-    name: "Jordan Wells",
-    username: "jordan_w",
-    avatar: "/avatars/avatar-6.jpg",
+    name: 'Jordan Wells',
+    username: 'jordan_w',
+    avatar: '/avatars/avatar-6.jpg',
     text: [
-      "Mentor AI feels like having a personal coding tutor 24/7. It helps me debug my code, improve my logic, and even teaches me new frameworks effortlessly.",
-      "I’ve built two side projects in half the time because of how fast it helps me overcome roadblocks. Highly recommend it for any developer!",
+      'Mentor AI feels like having a personal coding tutor 24/7. It helps me debug my code, improve my logic, and even teaches me new frameworks effortlessly.',
+      'I’ve built two side projects in half the time because of how fast it helps me overcome roadblocks. Highly recommend it for any developer!',
     ],
   },
   {
-    name: "Chris Bennett",
-    username: "chrisbennett",
-    avatar: "/avatars/avatar-5.jpg",
+    name: 'Chris Bennett',
+    username: 'chrisbennett',
+    avatar: '/avatars/avatar-5.jpg',
     text: [
-      "I was skeptical about AI-powered mentors, but Mentor AI proved me wrong. It doesn’t just correct errors—it teaches and explains.",
+      'I was skeptical about AI-powered mentors, but Mentor AI proved me wrong. It doesn’t just correct errors—it teaches and explains.',
     ],
   },
   {
-    name: "Emma Diaz",
-    username: "emma_d",
-    avatar: "/avatars/avatar-4.jpg",
+    name: 'Emma Diaz',
+    username: 'emma_d',
+    avatar: '/avatars/avatar-4.jpg',
     text: [
-      "Mentor AI isn’t just a tool—it’s like having a senior developer guiding you through every step of your journey.",
+      'Mentor AI isn’t just a tool—it’s like having a senior developer guiding you through every step of your journey.',
     ],
   },
   {
-    name: "Liam Brooks",
-    username: "liam_brooks",
-    avatar: "/avatars/avatar-2.jpeg",
+    name: 'Liam Brooks',
+    username: 'liam_brooks',
+    avatar: '/avatars/avatar-2.jpeg',
     text: [
       "It's like having a coding coach available 24/7. It helps me debug, optimize, and learn new concepts effortlessly.",
     ],

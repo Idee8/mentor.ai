@@ -1,4 +1,4 @@
-import { NotebookText, Telescope } from "lucide-react";
+import { NotebookText, Telescope } from 'lucide-react';
 
 export function Features() {
   return (

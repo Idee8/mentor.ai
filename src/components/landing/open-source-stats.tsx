@@ -1,13 +1,13 @@
-import Image from "next/image";
-import Link from "next/link";
+import Image from 'next/image';
+import Link from 'next/link';
 
-import { Github } from "../icons";
-import { fetchRepoStats } from "@/lib/github";
-import { ButtonLink } from "../ui/button-link";
+import { Github } from '../icons';
+import { fetchRepoStats } from '@/lib/github';
+import { ButtonLink } from '../ui/button-link';
 
 function formatNumber(num: number): string {
-  return new Intl.NumberFormat("en-US", {
-    notation: "compact",
+  return new Intl.NumberFormat('en-US', {
+    notation: 'compact',
     maximumFractionDigits: 1,
   }).format(num);
 }
@@ -24,8 +24,8 @@ export async function OpenSourseStats() {
           contribute to it however you want!
         </p>
         <ButtonLink
-          href={"https://github.com/idee8/mentor.ai"}
-          variant={"outline"}
+          href={'https://github.com/idee8/mentor.ai'}
+          variant={'outline'}
         >
           <Github />
           Star on Github
@@ -55,17 +55,17 @@ export async function OpenSourseStats() {
           <div className="flex flex-col justify-center items-center w-full md:w-1/2 p-6 text-center">
             <div className="flex justify-center mb-4 max-w-52">
               <Link
-                href={"https://github.com/idee8/mentor.ai/graphs/contributors"}
+                href={'https://github.com/idee8/mentor.ai/graphs/contributors'}
                 className="flex flex-wrap justify-center gap-2 max-w-xs"
               >
-                {contributorProfiles.map((contributor, index) => (
+                {contributorProfiles.map((contributor) => (
                   <div
-                    key={index}
+                    key={contributor.login}
                     className="relative h-10 w-10 block size-8 overflow-hidden rounded-full bg-gray-200 transition-transform duration-100 hover:scale-110"
                   >
                     <Image
                       src={contributor.avatar_url}
-                      alt={`Contributor ${index + 1}`}
+                      alt={`Contributor ${contributor.html_url}`}
                       width={40}
                       height={40}
                       className="object-cover w-full h-full"

@@ -6,7 +6,9 @@
     "dev": "next dev --turbopack",
     "build": "drizzle-kit migrate && next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "next lint && biome lint --write --unsafe",
+    "lint:fix": "next lint --fix && biome lint --write --unsafe",
+    "format": "biome format --write",
     "db:gen": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate"
   },
@@ -17,6 +19,7 @@
     "@radix-ui/react-visually-hidden": "^1.1.2",
     "@react-email/components": "^0.0.33",
     "@react-spring/web": "^9.7.5",
+    "better-auth": "^1.1.21",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "dotenv": "^16.4.7",
@@ -35,6 +38,7 @@
     "vaul": "^1.1.2"
   },
   "devDependencies": {
+    "@biomejs/biome": "1.9.4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",

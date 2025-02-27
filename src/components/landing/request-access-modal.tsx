@@ -1,23 +1,23 @@
-"use client";
+'use client';
 
 import {
-  Dispatch,
-  SetStateAction,
+  type Dispatch,
+  type SetStateAction,
   useCallback,
   useMemo,
   useState,
-} from "react";
-import useSWRMutation from "swr/mutation";
-import { toast } from "sonner";
+} from 'react';
+import useSWRMutation from 'swr/mutation';
+import { toast } from 'sonner';
 
-import { Modal } from "../ui/modal";
-import { Hexagon } from "lucide-react";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
+import { Modal } from '../ui/modal';
+import { Hexagon } from 'lucide-react';
+import { Input } from '../ui/input';
+import { Button } from '../ui/button';
 
 async function sendRequest(url: string, { arg }: { arg: { email: string } }) {
   return fetch(url, {
-    method: "POST",
+    method: 'POST',
     body: JSON.stringify(arg),
   }).then((res) => res.json());
 }
@@ -29,24 +29,24 @@ const RequestAccessModal = ({
   showRequestAccessModal: boolean;
   setShowRequestAccessModal: Dispatch<SetStateAction<boolean>>;
 }) => {
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState('');
   const { trigger, isMutating } = useSWRMutation(
-    "/api/request-access",
+    '/api/request-access',
     sendRequest,
     {
       onError: (error) => {
         console.log(error);
-        toast("Something went wrong!");
+        toast('Something went wrong!');
       },
       onSuccess: (data) => {
         if (data.message) {
           toast(data.message);
         } else {
-          toast("Check your inbox! You have joined the waitlist.");
+          toast('Check your inbox! You have joined the waitlist.');
         }
         setShowRequestAccessModal(false);
       },
-    }
+    },
   );
 
   return (
@@ -95,6 +95,6 @@ export function useRequestAccessModal() {
       setShowRequestAccessModal,
       RequestAccessModal: RequestAccessModalCallback,
     }),
-    [setShowRequestAccessModal, RequestAccessModalCallback]
+    [setShowRequestAccessModal, RequestAccessModalCallback],
   );
 }

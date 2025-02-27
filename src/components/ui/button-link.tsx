@@ -1,22 +1,22 @@
-"use client";
+'use client';
 
-import { ButtonProps, buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import Link from "next/link";
-import { ComponentProps } from "react";
+import { ButtonProps, buttonVariants } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
+import Link from 'next/link';
+import { ComponentProps } from 'react';
 
 export function ButtonLink({
   variant,
   className,
   ...rest
-}: Pick<ButtonProps, "variant"> & ComponentProps<typeof Link>) {
+}: Pick<ButtonProps, 'variant'> & ComponentProps<typeof Link>) {
   return (
     <Link
       {...rest}
       className={cn(
-        "flex h-10 w-fit items-center whitespace-nowrap rounded-lg border px-5 text-base",
+        'flex h-10 w-fit items-center whitespace-nowrap rounded-lg border px-5 text-base',
         buttonVariants({ variant }),
-        className
+        className,
       )}
     />
   );

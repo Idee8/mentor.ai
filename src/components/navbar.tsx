@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import Link from "next/link";
-import { Hexagon, Menu } from "lucide-react";
+import React, { useState } from 'react';
+import Link from 'next/link';
+import { Hexagon, Menu } from 'lucide-react';
 
-import { Button } from "./ui/button";
-import { MobileMenu } from "./mobile-menu";
-import { useScroll } from "@/hooks/use-scroll";
-import { cn } from "@/lib/utils";
+import { Button } from './ui/button';
+import { MobileMenu } from './mobile-menu';
+import { useScroll } from '@/hooks/use-scroll';
+import { cn } from '@/lib/utils';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -16,14 +16,14 @@ const Navbar = () => {
   const toggleMenu = () => {
     setIsOpen(!isOpen);
     // prevent scrolling when menu is open
-    document.body.style.overflow = isOpen ? "unset" : "hidden";
+    document.body.style.overflow = isOpen ? 'unset' : 'hidden';
   };
 
   return (
     <nav
       className={cn(
-        "w-full shadow sticky top-0 z-30 bg-background",
-        scrolled && "bg-muted/30 backdrop-blur border-b border-neutral-800"
+        'w-full shadow sticky top-0 z-30 bg-background',
+        scrolled && 'bg-muted/30 backdrop-blur border-b border-neutral-800',
       )}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -60,7 +60,7 @@ const Navbar = () => {
           <button
             className="sm:hidden block bg-card"
             onClick={toggleMenu}
-            aria-label={isOpen ? "Close menu" : "Open menu"}
+            aria-label={isOpen ? 'Close menu' : 'Open menu'}
           >
             <Menu
               size={24}

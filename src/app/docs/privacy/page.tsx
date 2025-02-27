@@ -1,8 +1,8 @@
-import { Metadata } from "next";
-import Link from "next/link";
+import { Metadata } from 'next';
+import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: "Privacy policy",
+  title: 'Privacy policy',
 };
 
 export default function Page() {
@@ -10,7 +10,7 @@ export default function Page() {
     <div className="max-w-3xl mx-auto space-y-6 py-6">
       <div className="max-w-24">
         <Link
-          href={"/"}
+          href={'/'}
           className="group flex divide-neutral-500 rounded-full border border-neutral-500 bg-neutral-800 text-xs font-medium drop-shadow-sm transition-colors duration-75 hover:bg-neutral-700 sm:divide-x animate-slide-up-fade [--offset:10px] [animation-delay:0ms] [animation-duration:1s] [animation-fill-mode:both] motion-reduce:animate-fade-in"
         >
           <span className="py-1.5 pl-4 text-foreground sm:pr-2.5">Go home</span>

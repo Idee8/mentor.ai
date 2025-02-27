@@ -1,8 +1,8 @@
-"use client";
-import Link from "next/link";
-import { Hexagon } from "lucide-react";
+'use client';
+import Link from 'next/link';
+import { Hexagon } from 'lucide-react';
 
-import { Discord, Github, Twitter } from "./icons";
+import { Discord, Github, Twitter } from './icons';
 
 export default function Footer() {
   return (

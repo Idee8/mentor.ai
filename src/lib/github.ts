@@ -12,25 +12,25 @@ interface RepoStats {
 }
 
 export async function fetchRepoStats(
-  owner: string = "idee8",
-  repo: string = "ShipFree"
+  owner: string = 'idee8',
+  repo: string = 'ShipFree',
 ): Promise<RepoStats> {
   const headers = {
-    Accept: "application/vnd.github.v3+json",
+    Accept: 'application/vnd.github.v3+json',
   };
 
   try {
     // Fetch repository data (includes star count)
     const repoResponse = await fetch(
       `https://api.github.com/repos/${owner}/${repo}`,
-      { headers }
+      { headers },
     );
     const repoData = await repoResponse.json();
 
     // Fetch contributors with their profiles
     const contributorsResponse = await fetch(
       `https://api.github.com/repos/${owner}/${repo}/contributors`,
-      { headers }
+      { headers },
     );
     const contributorsData = await contributorsResponse.json();
 
@@ -50,7 +50,7 @@ export async function fetchRepoStats(
       contributorProfiles: topContributors,
     };
   } catch (error) {
-    console.error("Error fetching repository stats:", error);
+    console.error('Error fetching repository stats:', error);
     return {
       stars: 0,
       contributors: 0,

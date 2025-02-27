@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { X } from "lucide-react";
+import Link from 'next/link';
+import { X } from 'lucide-react';
 
-import { cn } from "@/lib/utils";
-import { Button } from "./ui/button";
+import { cn } from '@/lib/utils';
+import { Button } from './ui/button';
 
 export function MobileMenu({
   isOpen,
@@ -16,9 +16,9 @@ export function MobileMenu({
   return (
     <div
       className={cn(
-        "fixed inset-0 bg-background/95 backdrop-blur-sm z-50 sm:hidden",
-        "transition-all duration-300 ease-in-out",
-        isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+        'fixed inset-0 bg-background/95 backdrop-blur-sm z-50 sm:hidden',
+        'transition-all duration-300 ease-in-out',
+        isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none',
       )}
     >
       <div className="flex justify-end items-center p-8">

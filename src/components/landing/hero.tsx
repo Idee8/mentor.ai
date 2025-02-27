@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { SvgGrid } from "./grid";
-import { ArrowUpRight } from "lucide-react";
-import { BlurText } from "../ui/blur-text";
-import { Button } from "../ui/button";
-import { useContext } from "react";
-import { LandingContext } from "@/app/(landing)/provider";
+import Link from 'next/link';
+import { SvgGrid } from './grid';
+import { ArrowUpRight } from 'lucide-react';
+import { BlurText } from '../ui/blur-text';
+import { Button } from '../ui/button';
+import { useContext } from 'react';
+import { LandingContext } from '@/app/(landing)/provider';
 
 export function Hero() {
   const { setShowRequestAccessModal } = useContext(LandingContext);
@@ -15,7 +15,7 @@ export function Hero() {
       <SvgGrid />
       <div className="max-w-4xl flex flex-col items-center mx-auto md:p-8 py-8 px-2 space-y-8 mt-9">
         <Link
-          href={"/docs/manifesto"}
+          href={'/docs/manifesto'}
           className="group flex divide-neutral-500 rounded-full border border-neutral-500 bg-neutral-800 text-xs font-medium drop-shadow-sm transition-colors duration-75 hover:bg-neutral-700 sm:divide-x animate-slide-up-fade [--offset:10px] [animation-delay:0ms] [animation-duration:1s] [animation-fill-mode:both] motion-reduce:animate-fade-in"
         >
           <span className="py-1.5 pl-4 text-foreground sm:pr-2.5">
@@ -54,7 +54,7 @@ export function Hero() {
         <div>
           <Button
             className="rounded-lg"
-            size={"lg"}
+            size={'lg'}
             onClick={() => setShowRequestAccessModal(true)}
           >
             Early Access - it's free
@@ -63,9 +63,9 @@ export function Hero() {
           <div className="flex gap-4 items-center sm:h-10 mt-4 cursor-pointer">
             <div className="flex items-center justify-center -space-x-2">
               {[
-                "/avatars/avatar-0.jpeg",
-                "/avatars/avatar-1.jpg",
-                "/avatars/avatar-2.jpeg",
+                '/avatars/avatar-0.jpeg',
+                '/avatars/avatar-1.jpg',
+                '/avatars/avatar-2.jpeg',
               ].map((avatar, idx) => (
                 <div
                   key={avatar}
