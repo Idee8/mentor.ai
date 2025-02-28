@@ -4,10 +4,10 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { Hexagon, Menu } from 'lucide-react';
 
-import { Button } from './ui/button';
 import { MobileMenu } from './mobile-menu';
 import { useScroll } from '@/hooks/use-scroll';
 import { cn } from '@/lib/utils';
+import { ButtonLink } from './ui/button-link';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -54,10 +54,13 @@ const Navbar = () => {
             >
               Login
             </Link>
-            <Button className="rounded-md">Sign Up</Button>
+            <ButtonLink href={'/register'} className="rounded-md">
+              Sign Up
+            </ButtonLink>
           </div>
 
           <button
+            type="button"
             className="sm:hidden block bg-card"
             onClick={toggleMenu}
             aria-label={isOpen ? 'Close menu' : 'Open menu'}

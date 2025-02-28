@@ -5,6 +5,8 @@ import * as schema from '@/db/schema';
 import { db } from '@/db';
 import { resend } from './resend';
 import { MagicLinkEmail } from '@/components/emails/verify';
+import { MENTOR_AI_EMAIL } from './constants';
+import { reactResetPasswordEmail } from '@/components/emails/reset-password';
 
 export const auth = betterAuth({
   appName: 'Mentor AI',
@@ -18,6 +20,17 @@ export const auth = betterAuth({
   }),
   emailAndPassword: {
     enabled: true,
+    async sendResetPassword({ user, url }) {
+      await resend.emails.send({
+        from: MENTOR_AI_EMAIL,
+        to: user.email,
+        subject: 'Reset your password',
+        react: reactResetPasswordEmail({
+          username: user.email,
+          resetLink: url,
+        }),
+      });
+    },
   },
   account: {
     accountLinking: {
@@ -29,7 +42,7 @@ export const auth = betterAuth({
     sendVerificationEmail: async ({ user, url }) => {
       // email sending function
       const { error } = await resend.emails.send({
-        from: 'MentorAI <send@idee8.agency>',
+        from: MENTOR_AI_EMAIL,
         to: [user.email],
         subject: 'Verify your Email Address',
         react: MagicLinkEmail({ magicLink: url }),

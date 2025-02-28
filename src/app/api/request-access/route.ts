@@ -4,6 +4,7 @@ import { Resend } from 'resend';
 import { WelcomeEmail } from '@/components/emails/welcome';
 import { db } from '@/db';
 import { waitlistusers } from '@/db/schema';
+import { MENTOR_AI_EMAIL } from '@/lib/constants';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -28,8 +29,8 @@ export async function POST(request: Request) {
       await db.insert(waitlistusers).values({ email });
 
       const { data, error } = await resend.emails.send({
-        from: 'MentorAI <send@idee8.agency>',
-        to: ['delivered@resend.dev'],
+        from: MENTOR_AI_EMAIL,
+        to: [email],
         subject: "Welcome to Mentor AI – You're on the Waitlist!",
         react: WelcomeEmail(),
       });
