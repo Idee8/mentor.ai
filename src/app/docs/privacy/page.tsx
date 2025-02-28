@@ -1,4 +1,5 @@
-import { Metadata } from 'next';
+import { ArrowUpRight } from 'lucide-react';
+import type { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
@@ -8,14 +9,18 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <div className="max-w-3xl mx-auto space-y-6 py-6">
-      <div className="max-w-24">
-        <Link
-          href={'/'}
-          className="group flex divide-neutral-500 rounded-full border border-neutral-500 bg-neutral-800 text-xs font-medium drop-shadow-sm transition-colors duration-75 hover:bg-neutral-700 sm:divide-x animate-slide-up-fade [--offset:10px] [animation-delay:0ms] [animation-duration:1s] [animation-fill-mode:both] motion-reduce:animate-fade-in"
-        >
-          <span className="py-1.5 pl-4 text-foreground sm:pr-2.5">Go home</span>
-        </Link>
-      </div>
+      <Link
+        href={'/'}
+        className="group flex divide-neutral-500 max-w-28 rounded-full border border-neutral-500 bg-neutral-800 text-xs font-medium drop-shadow-sm transition-colors duration-75 hover:bg-neutral-700 sm:divide-x animate-slide-up-fade [--offset:10px] [animation-delay:0ms] [animation-duration:1s] [animation-fill-mode:both] motion-reduce:animate-fade-in"
+      >
+        <span className="py-1.5 pl-4 text-foreground sm:pr-2.5">Go home</span>
+        <span className="flex items-center gap-1.5 p-1.5 pl-2.5">
+          <div className="rounded-full bg-neutral-100 p-0.5">
+            <ArrowUpRight className="size-2.5 text-neutral-700 transition-transform duration-100 group-hover:-translate-y-px group-hover:translate-x-px" />
+          </div>
+        </span>
+      </Link>
+
       <div className="border border-neutral-700 p-8 rounded-lg shadow space-y-6 text-neutral-200">
         <h1 className="text-3xl text-center font-bold mb-4">Privacy Policy</h1>
 

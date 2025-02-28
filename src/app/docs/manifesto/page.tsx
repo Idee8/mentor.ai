@@ -1,16 +1,21 @@
+import { ArrowUpRight } from 'lucide-react';
 import Link from 'next/link';
 
 export default function Page() {
   return (
     <div className="max-w-3xl mx-auto space-y-6 py-6">
-      <div className="max-w-24">
-        <Link
-          href={'/'}
-          className="group flex divide-neutral-500 rounded-full border border-neutral-500 bg-neutral-800 text-xs font-medium drop-shadow-sm transition-colors duration-75 hover:bg-neutral-700 sm:divide-x animate-slide-up-fade [--offset:10px] [animation-delay:0ms] [animation-duration:1s] [animation-fill-mode:both] motion-reduce:animate-fade-in"
-        >
-          <span className="py-1.5 pl-4 text-foreground sm:pr-2.5">Go home</span>
-        </Link>
-      </div>
+      <Link
+        href={'/'}
+        className="group flex divide-neutral-500 max-w-28 rounded-full border border-neutral-500 bg-neutral-800 text-xs font-medium drop-shadow-sm transition-colors duration-75 hover:bg-neutral-700 sm:divide-x animate-slide-up-fade [--offset:10px] [animation-delay:0ms] [animation-duration:1s] [animation-fill-mode:both] motion-reduce:animate-fade-in"
+      >
+        <span className="py-1.5 pl-4 text-foreground sm:pr-2.5">Go home</span>
+        <span className="flex items-center gap-1.5 p-1.5 pl-2.5">
+          <div className="rounded-full bg-neutral-100 p-0.5">
+            <ArrowUpRight className="size-2.5 text-neutral-700 transition-transform duration-100 group-hover:-translate-y-px group-hover:translate-x-px" />
+          </div>
+        </span>
+      </Link>
+
       <div className="border border-border p-3 rounded-lg shadow space-y-3">
         <h1 className="font-serif text-3xl mt-3">Code Comphrension</h1>
         <p>

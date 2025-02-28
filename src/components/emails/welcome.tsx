@@ -9,13 +9,7 @@ import {
 } from '@react-email/components';
 import * as React from 'react';
 
-interface WelcomeEmailProps {}
-
-const baseUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : '';
-
-export const WelcomeEmail = ({}: WelcomeEmailProps) => (
+export const WelcomeEmail = () => (
   <Html>
     <Head />
     <Body style={main}>

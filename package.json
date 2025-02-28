@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "drizzle-kit migrate && next build",
+    "build": "drizzle-kit push && next build",
     "start": "next start",
     "lint": "next lint && biome lint --write --unsafe",
     "lint:fix": "next lint --fix && biome lint --write --unsafe",
@@ -15,6 +15,7 @@
   "dependencies": {
     "@radix-ui/react-accordion": "^1.2.3",
     "@radix-ui/react-dialog": "^1.1.6",
+    "@radix-ui/react-icons": "^1.3.2",
     "@radix-ui/react-slot": "^1.1.2",
     "@radix-ui/react-visually-hidden": "^1.1.2",
     "@react-email/components": "^0.0.33",
