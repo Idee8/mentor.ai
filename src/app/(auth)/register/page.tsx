@@ -29,7 +29,7 @@ export default function RegisterPage() {
       const result = await signIn.email({
         email,
         password,
-        callbackURL: '/dashboard',
+        callbackURL: '/dash',
       });
 
       if (result?.error) {
@@ -151,7 +151,7 @@ export default function RegisterPage() {
               onClick={async () =>
                 await signIn.social({
                   provider: 'github',
-                  callbackURL: '/dashboard',
+                  callbackURL: '/dash',
                 })
               }
             >
@@ -163,7 +163,7 @@ export default function RegisterPage() {
               type="button"
               variant={'outline'}
               onClick={() =>
-                signIn.social({ provider: 'gitlab', callbackURL: '/dashboard' })
+                signIn.social({ provider: 'gitlab', callbackURL: '/dash' })
               }
             >
               <svg
