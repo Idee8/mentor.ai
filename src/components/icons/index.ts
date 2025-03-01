@@ -11,3 +11,4 @@ export { default as Telescope } from './telescope';
 export { default as Astroid } from './astroid';
 export { default as SearchList } from './search-list';
 export { default as TimerIcon } from './timer';
+export { default as FileScript } from './file-script';
