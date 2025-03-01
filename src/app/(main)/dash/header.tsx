@@ -13,7 +13,7 @@ import { useState } from 'react';
 export const Header: React.FC = () => {
   const [openHistory, setOpenHistory] = useState(false);
   return (
-    <div className="flex w-full justify-end gap-4 px-4">
+    <div className="flex w-full justify-end gap-4 p-4">
       <Tooltip>
         <TooltipTrigger asChild>
           <TimerIcon className={cn('cursor-pointer')} />

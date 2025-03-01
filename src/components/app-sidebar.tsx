@@ -69,7 +69,7 @@ type MenuItem = {
 
 // Sidebar Items
 const menuItems: MenuItem[] = [
-  { icon: <CpuIcon />, label: 'Home', path: '/', active: true },
+  { icon: <CpuIcon />, label: 'Home', path: '/dash', active: true },
   { icon: <Telescope />, label: 'Discover', path: '/discover' },
   { icon: <Astroid />, label: 'Spaces', path: '/spaces' },
   { icon: <DocumentAttachment />, label: 'Documents', path: '/documents' },

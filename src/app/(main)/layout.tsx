@@ -7,7 +7,7 @@ export default async function DashboardLayout({
     <SidebarProvider>
       <div className="flex h-screen">
         <AppSidebar />
-        <main className="flex-1 overflow-auto p-3">{children}</main>
+        <main className="flex-1 overflow-auto">{children}</main>
       </div>
     </SidebarProvider>
   );
