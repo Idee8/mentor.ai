@@ -79,7 +79,7 @@
         "noExplicitAny": "off" // We trust Vercelians to use any only when necessary
       },
       "nursery": {
-        "noStaticElementInteractions": "warn",
+        "noStaticElementInteractions": "off",
         "noHeadImportInDocument": "warn",
         "noDocumentImportInPage": "warn",
         "noDuplicateElseIf": "warn",
