@@ -1,5 +1,9 @@
 'use client';
 
+import { Bookmark, Clock1, MoreHorizontal, Share } from 'lucide-react';
+import { useMemo, useState } from 'react';
+import { format } from 'date-fns';
+
 import History from '@/components/history';
 import { SearchList } from '@/components/icons';
 import {
@@ -8,14 +12,16 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
-import { Bookmark, Clock1, MoreHorizontal, Share } from 'lucide-react';
-import { useState } from 'react';
 import { Button } from './ui/button';
 import { useScroll } from '@/hooks/use-scroll';
+import type { Chat } from '@/db/schema';
 
-export const ChatHeader: React.FC = () => {
+export const ChatHeader: React.FC<{ chat: Chat }> = ({ chat }) => {
   const [openHistory, setOpenHistory] = useState(false);
   const scrolled = useScroll(50);
+
+  const dt = useMemo(() => new Date(chat.createdAt), [chat.createdAt]);
+
   return (
     <div
       className={cn(
@@ -25,10 +31,10 @@ export const ChatHeader: React.FC = () => {
     >
       <div className="flex gap-3 items-center text-neutral-400">
         <Clock1 className="h-4 w-4" />
-        <p className="text-sm">Feb 28, 2025</p>
+        <p className="text-sm">{format(dt, 'MMM, dd yyyy')}</p>
       </div>
       <div>
-        <p>Why do people want to code?</p>
+        <p>{chat.title}</p>
       </div>
       <div className="flex justify-end gap-4 px-4 items-center text-neutral-300">
         <MoreHorizontal className={cn('cursor-pointer')} />

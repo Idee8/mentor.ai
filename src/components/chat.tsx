@@ -13,6 +13,7 @@ import { ChatForm } from './chat-form';
 import { toast } from 'sonner';
 import type { VisibilityType } from './visibility-selector';
 import { useChatContext } from './chat-provider';
+import { Messages } from './messages';
 
 export function Chat({
   id,
@@ -36,6 +37,7 @@ export function Chat({
     append,
     isLoading,
     stop,
+    reload,
   } = useChat({
     id,
     body: { id, selectedChatModel: selectedChatModel },
@@ -61,8 +63,8 @@ export function Chat({
   return (
     <>
       <div className="flex flex-col min-w-0 h-dvh bg-background">
-        <ChatHeader />
-        {/* 
+        <ChatHeader chat={chat} />
+
         <Messages
           chatId={id}
           isLoading={isLoading}
@@ -70,12 +72,11 @@ export function Chat({
           messages={messages}
           setMessages={setMessages}
           reload={reload}
-          isReadonly={isReadonly}
-          isArtifactVisible={isArtifactVisible}
-        /> */}
+          isReadonly={chat.userId !== user?.id}
+        />
 
-        <form className="flex mx-auto px-4 bg-background pb-4 md:pb-6 gap-2 w-full md:max-w-3xl">
-          {!(chat.userId === user?.id) && (
+        <div className="flex mx-auto px-4 bg-background pb-4 md:pb-6 gap-2 w-full">
+          {!(chat.userId !== user?.id) && (
             <ChatForm
               chatId={id}
               input={input}
@@ -90,7 +91,7 @@ export function Chat({
               append={append}
             />
           )}
-        </form>
+        </div>
       </div>
     </>
   );
