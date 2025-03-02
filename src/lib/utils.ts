@@ -178,7 +178,7 @@ export function sanitizeResponseMessages({
   );
 }
 
-export function sanitizedUIMessages(messages: Array<Message>): Array<Message> {
+export function sanitizeUIMessages(messages: Array<Message>): Array<Message> {
   const messagesBySanitizedToolInvocations = messages.map((message) => {
     if (message.role !== 'assistant') return message;
 

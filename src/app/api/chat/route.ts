@@ -1,5 +1,5 @@
 import { myProvider } from '@/ai/models';
-import { getWeather } from '@/ai/models/get-weather';
+import { getWeather } from '@/ai/tools/get-weather';
 import { systemPrompt } from '@/ai/prompts';
 import { generateTitleFromUserMessage } from '@/app/(main)/actions';
 import {

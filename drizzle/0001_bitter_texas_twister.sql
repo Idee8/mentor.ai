@@ -2,7 +2,7 @@ CREATE TABLE "chats" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"created_at" timestamp NOT NULL,
 	"title" text NOT NULL,
-	"user_id" uuid NOT NULL,
+	"user_id" text NOT NULL,
 	"visibility" varchar DEFAULT 'private' NOT NULL
 );
 --> statement-breakpoint

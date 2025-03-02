@@ -1,7 +1,16 @@
-import { ChatForm } from './chat-form';
-import { Header } from './header';
+import { cookies } from 'next/headers';
 
-export default function DashboardPage() {
+import { Header } from './header';
+import { generateUUID } from '@/lib/utils';
+import { Form } from './form';
+import { DEFAULT_CHAT_MODEL } from '@/ai/models';
+
+export default async function DashboardPage() {
+  const id = generateUUID();
+
+  const cookieStore = await cookies();
+  const modelFromCookie = cookieStore.get('chat-model');
+
   return (
     <div className="w-full flex flex-col h-full">
       <Header />
@@ -10,13 +19,11 @@ export default function DashboardPage() {
           How can I help you today?
         </h1>
 
-        <ChatForm />
-
-        {/* <div className="flex flex-col sm:flex-row items-start gap-4 mt-4 max-w-2xl">
-          <div className="flex flex-col gap-4 sm:w-1/2">
-            <p>Trending</p>
-          </div>
-        </div> */}
+        <Form
+          id={id}
+          initialMessages={[]}
+          selectedChatModel={modelFromCookie?.name || DEFAULT_CHAT_MODEL}
+        />
       </div>
     </div>
   );

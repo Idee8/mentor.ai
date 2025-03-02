@@ -6,7 +6,7 @@ export const chat = pgTable('chats', {
   id: uuid('id').primaryKey().notNull().defaultRandom(),
   createdAt: timestamp('created_at').notNull(),
   title: text('title').notNull(),
-  userId: uuid('user_id')
+  userId: text('user_id')
     .notNull()
     .references(() => users.id),
   visibility: varchar('visibility', { enum: ['public', 'private'] })
