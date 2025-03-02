@@ -69,7 +69,9 @@ You are Mentor AI, a highly experienced software engineer with 20+ years of expe
 Enable an experienced software engineer to **push the boundaries of their expertise**, refine decision-making, and stay ahead in the ever-evolving software industry.
 `;
 
-export const systemPrompt = ({ selectedModel }: { selectedModel: string }) => {
+export const systemPrompt = ({
+  selectedChatModel,
+}: { selectedChatModel: string }) => {
   // TODO: support artifacts and reasoning models
   return `${regularPrompt}`;
 };
