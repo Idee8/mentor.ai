@@ -32,7 +32,7 @@ Software development is complex, and traditional documentation often falls short
 
 ## Contribution
 
-Mentor AI is a free and open-source project licensed under the [Apache 2.0 License](./LICENSE.md). You are welcome to contribute in any way you can.
+Mentor AI is a free and open-source project licensed under the [GNU Affero General Public License v3.0](./LICENSE.md). You are welcome to contribute in any way you can.
 
 Ways to contribute:
 
