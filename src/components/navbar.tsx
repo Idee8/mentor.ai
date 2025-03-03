@@ -8,6 +8,7 @@ import { MobileMenu } from './mobile-menu';
 import { useScroll } from '@/hooks/use-scroll';
 import { cn } from '@/lib/utils';
 import { ButtonLink } from './ui/button-link';
+import { useSession } from '@/lib/auth-client';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -48,15 +49,7 @@ const Navbar = () => {
           </div>
 
           <div className="sm:flex items-center space-x-4 hidden">
-            <Link
-              href="/login"
-              className="text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Login
-            </Link>
-            <ButtonLink href={'/register'} className="rounded-md">
-              Sign Up
-            </ButtonLink>
+            <NavbarLeft />
           </div>
 
           <button
@@ -89,6 +82,47 @@ const NavbarLink: React.FC<{
     >
       {label}
     </Link>
+  );
+};
+
+export const NavbarLeft: React.FC = () => {
+  const { data, isPending } = useSession();
+
+  if (isPending || !data) {
+    return (
+      <>
+        <Link
+          href="/login"
+          className="text-muted-foreground hover:text-foreground transition-colors"
+        >
+          Login
+        </Link>
+        <ButtonLink href={'/register'} className="rounded-md">
+          Sign Up
+        </ButtonLink>
+      </>
+    );
+  }
+  return (
+    <>
+      {!data?.user ? (
+        <>
+          <Link
+            href="/login"
+            className="text-muted-foreground hover:text-foreground transition-colors"
+          >
+            Login
+          </Link>
+          <ButtonLink href={'/register'} className="rounded-md">
+            Sign Up
+          </ButtonLink>
+        </>
+      ) : (
+        <ButtonLink href={'/register'} className="rounded-md">
+          Go to app
+        </ButtonLink>
+      )}
+    </>
   );
 };
 
