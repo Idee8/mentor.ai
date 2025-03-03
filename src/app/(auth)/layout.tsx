@@ -8,12 +8,12 @@ export default function AuthLayout({
 }: { children: React.ReactNode }) {
   const { data, isPending } = useSession();
 
-  if (isPending || !data) {
+  if (isPending) {
     // TODO: make this loading state better
     return null;
   }
 
-  if (data.user) {
+  if (data?.user) {
     redirect('/dash');
   }
   return <div>{children}</div>;
