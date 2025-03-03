@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ArrowUpRight, Hexagon } from 'lucide-react';
 import { Github, GitLab } from '@/components/icons';
+import { PasswordInput } from '@/components/ui/password-input';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -112,7 +113,7 @@ export default function LoginPage() {
                   Forgot your password?
                 </Link>
               </div>
-              <Input
+              <PasswordInput
                 id="password"
                 name="password"
                 type="password"

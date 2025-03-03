@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { ArrowUpRight, Hexagon } from 'lucide-react';
 import { generateUUID } from '@/lib/utils';
 import { Github, GitLab } from '@/components/icons';
+import { PasswordInput } from '@/components/ui/password-input';
 
 export default function RegisterPage() {
   const [email, setEmail] = useState('');
@@ -106,7 +107,7 @@ export default function RegisterPage() {
                   Password
                 </label>
               </div>
-              <Input
+              <PasswordInput
                 id="password"
                 name="password"
                 type="password"
