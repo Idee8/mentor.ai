@@ -1,50 +1,45 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { z } from 'zod';
+import { toast } from 'sonner';
+import { ArrowUpRight, Hexagon, Loader2 } from 'lucide-react';
+
 import { signIn, signUp } from '@/lib/auth-client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { ArrowUpRight, Hexagon } from 'lucide-react';
-import { generateUUID } from '@/lib/utils';
 import { Github, GitLab } from '@/components/icons';
 import { PasswordInput } from '@/components/ui/password-input';
+import { generateUUID } from '@/lib/utils';
+
+const signUpSchema = z.object({
+  email: z.string().email('Invalid email address'),
+  password: z.string().min(8, 'Password must be at least 8 characters'),
+});
 
 export default function RegisterPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | undefined>();
+  const [errors, setErrors] = useState({ email: '', password: '' });
+  const [isValid, setIsValid] = useState(false);
+  const [touched, setTouched] = useState({ email: false, password: false });
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!email || !password) {
-      setError('Email and password are required');
-      return;
-    }
-
-    try {
-      setIsLoading(true);
-      setError('');
-
-      const result = await signUp.email({
-        email,
-        password,
-        name: `user-${generateUUID().slice(0, 5)}`,
-        callbackURL: '/dash',
+  useEffect(() => {
+    const validationResult = signUpSchema.safeParse({ email, password });
+    if (!validationResult.success) {
+      const newErrors: any = {};
+      validationResult.error.errors.forEach((err) => {
+        newErrors[err.path[0]] = err.message;
       });
-
-      if (result?.error) {
-        setError(result.error.message);
-      }
-    } catch (err) {
-      setError('An error occurred during sign in');
-      console.error(err);
-    } finally {
-      setIsLoading(false);
+      setErrors(newErrors);
+      setIsValid(false);
+    } else {
+      setErrors({ email: '', password: '' });
+      setIsValid(true);
     }
-  };
+  }, [email, password]);
 
   return (
     <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
@@ -76,7 +71,27 @@ export default function RegisterPage() {
           </p>
         </div>
 
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+        <form
+          className="mt-8 space-y-6"
+          onSubmit={async (e) => {
+            e.preventDefault();
+            await signUp.email(
+              {
+                email: email,
+                password: password,
+                name: `user-${generateUUID().slice(0, 4)}`,
+                callbackURL: '/dash',
+              },
+              {
+                onRequest: () => setIsLoading(true),
+                onResponse: () => setIsLoading(false),
+                onError: (ctx) => {
+                  toast.error(ctx.error.message);
+                },
+              },
+            );
+          }}
+        >
           <div className="rounded-md space-y-4">
             <div>
               <label
@@ -92,10 +107,16 @@ export default function RegisterPage() {
                 autoComplete="email"
                 required
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  setTouched((prev) => ({ ...prev, email: true }));
+                }}
                 placeholder="alan.turing@example.com"
                 className="h-10 my-3"
               />
+              {touched.email && errors.email && (
+                <p className="text-red-500 text-sm">{errors.email}</p>
+              )}
             </div>
 
             <div>
@@ -111,26 +132,31 @@ export default function RegisterPage() {
                 id="password"
                 name="password"
                 type="password"
-                autoComplete="current-password"
-                required
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  setTouched((prev) => ({ ...prev, password: true }));
+                }}
+                autoComplete="password"
+                placeholder="Password"
                 className="h-10 my-3"
               />
+              {touched.password && errors.password && (
+                <p className="text-red-500 text-sm">{errors.password}</p>
+              )}
             </div>
           </div>
-
-          {error && (
-            <div className="text-red-500 text-sm font-medium">{error}</div>
-          )}
-
           <Button
             variant={'secondary'}
             size={'lg'}
             className="w-full"
             disabled={isLoading}
           >
-            Create account
+            {isLoading ? (
+              <Loader2 size={16} className="animate-spin" />
+            ) : (
+              'Create an account'
+            )}
           </Button>
         </form>
 

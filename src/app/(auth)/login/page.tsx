@@ -1,50 +1,45 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { z } from 'zod';
+import { ArrowUpRight, Hexagon } from 'lucide-react';
 import { ArrowRightIcon } from '@radix-ui/react-icons';
+import { toast } from 'sonner';
+
 import { signIn } from '@/lib/auth-client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { ArrowUpRight, Hexagon } from 'lucide-react';
 import { Github, GitLab } from '@/components/icons';
 import { PasswordInput } from '@/components/ui/password-input';
+
+const signInSchema = z.object({
+  email: z.string().email('Invalid email address'),
+  password: z.string().min(8, 'Password must be at least 8 characters'),
+});
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | undefined>();
+  const [errors, setErrors] = useState({ email: '', password: '' });
+  const [isValid, setIsValid] = useState(false);
+  const [touched, setTouched] = useState({ email: false, password: false });
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!email || !password) {
-      setError('Email and password are required');
-      return;
-    }
-
-    try {
-      setIsLoading(true);
-      setError('');
-
-      const result = await signIn.email({
-        email,
-        password,
-        callbackURL: '/dash',
+  useEffect(() => {
+    const validationResult = signInSchema.safeParse({ email, password });
+    if (!validationResult.success) {
+      const newErrors: any = {};
+      validationResult.error.errors.forEach((err) => {
+        newErrors[err.path[0]] = err.message;
       });
-
-      if (result?.error) {
-        setError(result.error.message);
-      }
-      // Redirect will be handled by next-auth if successful
-    } catch (err) {
-      setError('An error occurred during sign in');
-      console.error(err);
-    } finally {
-      setIsLoading(false);
+      setErrors(newErrors);
+      setIsValid(false);
+    } else {
+      setErrors({ email: '', password: '' });
+      setIsValid(true);
     }
-  };
+  }, [email, password]);
 
   return (
     <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
@@ -76,7 +71,26 @@ export default function LoginPage() {
           </p>
         </div>
 
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+        <form
+          className="mt-8 space-y-6"
+          onSubmit={async (e) => {
+            e.preventDefault();
+            await signIn.email(
+              {
+                email: email,
+                password: password,
+                callbackURL: '/dash',
+              },
+              {
+                onRequest: () => setIsLoading(true),
+                onResponse: () => setIsLoading(false),
+                onError: (ctx) => {
+                  toast.error(ctx.error.message);
+                },
+              },
+            );
+          }}
+        >
           <div className="rounded-md space-y-4">
             <div>
               <label
@@ -91,11 +105,16 @@ export default function LoginPage() {
                 type="email"
                 autoComplete="email"
                 required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  setTouched((prev) => ({ ...prev, email: true }));
+                }}
                 placeholder="alan.turing@example.com"
                 className="h-10 my-3"
               />
+              {touched.email && errors.email && (
+                <p className="text-red-500 text-sm">{errors.email}</p>
+              )}
             </div>
 
             <div>
@@ -120,15 +139,17 @@ export default function LoginPage() {
                 autoComplete="current-password"
                 required
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  setTouched((prev) => ({ ...prev, password: true }));
+                }}
                 className="h-10 my-3"
               />
+              {touched.password && errors.password && (
+                <p className="text-red-500 text-sm">{errors.password}</p>
+              )}
             </div>
           </div>
-
-          {error && (
-            <div className="text-red-500 text-sm font-medium">{error}</div>
-          )}
 
           <Button
             variant={'secondary'}
@@ -159,7 +180,7 @@ export default function LoginPage() {
               onClick={async () =>
                 await signIn.social({
                   provider: 'github',
-                  callbackURL: '/dashboard',
+                  callbackURL: '/dash',
                 })
               }
             >
