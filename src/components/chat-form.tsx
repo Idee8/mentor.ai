@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
 import type {
   Attachment,
   ChatRequestOptions,
   CreateMessage,
   Message,
-} from 'ai';
-import type React from 'react';
+} from "ai";
+import type React from "react";
 import {
   useRef,
   useEffect,
@@ -16,15 +16,16 @@ import {
   type SetStateAction,
   type ChangeEvent,
   memo,
-} from 'react';
-import { toast } from 'sonner';
-import { useLocalStorage, useWindowSize } from 'usehooks-ts';
+} from "react";
+import { toast } from "sonner";
+import { useLocalStorage, useWindowSize } from "usehooks-ts";
 
-import { sanitizeUIMessages } from '@/lib/utils';
+import { sanitizeUIMessages } from "@/lib/utils";
 
-import { FileScript, Github } from '@/components/icons';
-import equal from 'fast-deep-equal';
-import { ArrowUpIcon, StopIcon } from '@radix-ui/react-icons';
+import { FileScript, Github } from "@/components/icons";
+import equal from "fast-deep-equal";
+import { ArrowUpIcon, StopIcon } from "@radix-ui/react-icons";
+import { usePathname } from "next/navigation";
 
 export interface ChatFormProps {
   chatId: string;
@@ -38,20 +39,20 @@ export interface ChatFormProps {
   setMessages?: Dispatch<SetStateAction<Array<Message>>>;
   append?: (
     message: Message | CreateMessage,
-    chatRequestOptions?: ChatRequestOptions,
+    chatRequestOptions?: ChatRequestOptions
   ) => Promise<string | null | undefined>;
   handleSubmit?: (
     event?: {
       preventDefault?: () => void;
     },
-    chatRequestOptions?: ChatRequestOptions,
+    chatRequestOptions?: ChatRequestOptions
   ) => void;
   className?: string;
 }
 
 function PureChatForm({
   chatId,
-  input = '',
+  input = "",
   setInput = () => {},
   isLoading = false,
   stop = () => {},
@@ -63,6 +64,7 @@ function PureChatForm({
   handleSubmit = () => {},
   className,
 }: ChatFormProps) {
+  const pathname = usePathname();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const { width } = useWindowSize();
   const [isModelMenuOpen, setIsModelMenuOpen] = useState<boolean>(false);
@@ -84,36 +86,39 @@ function PureChatForm({
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
   const adjustHeight = () => {
     if (textareaRef.current) {
-      textareaRef.current.style.height = 'auto';
-      textareaRef.current.style.height = `${Math.min(textareaRef.current.scrollHeight, 200)}px`;
+      textareaRef.current.style.height = "auto";
+      textareaRef.current.style.height = `${Math.min(
+        textareaRef.current.scrollHeight,
+        200
+      )}px`;
     }
   };
 
   const resetHeight = () => {
     if (textareaRef.current) {
-      textareaRef.current.style.height = 'auto';
-      textareaRef.current.style.height = '44px';
+      textareaRef.current.style.height = "auto";
+      textareaRef.current.style.height = "44px";
     }
   };
 
   const [localStorageInput, setLocalStorageInput] = useLocalStorage(
-    'input',
-    '',
+    "input",
+    ""
   );
 
   useEffect(() => {
     if (textareaRef.current) {
       const domValue = textareaRef.current.value;
       // Prefer DOM value over localStorage to handle hydration
-      const finalValue = domValue || localStorageInput || '';
+      const finalValue = domValue || localStorageInput || "";
       setInput(finalValue);
       adjustHeight();
     }
@@ -140,14 +145,17 @@ function PureChatForm({
   const [uploadQueue, setUploadQueue] = useState<Array<string>>([]);
 
   const submitForm = useCallback(() => {
-    window.history.replaceState({}, '', `/chat/${chatId}`);
+    // Only update the URL without full navigation
+    if (pathname !== `/chat/${chatId}`) {
+      window.history.pushState({}, "", `/chat/${chatId}`);
+    }
 
     handleSubmit(undefined, {
       experimental_attachments: attachments,
     });
 
     setAttachments([]);
-    setLocalStorageInput('');
+    setLocalStorageInput("");
     resetHeight();
 
     if (width && width > 768) {
@@ -160,15 +168,16 @@ function PureChatForm({
     setLocalStorageInput,
     width,
     chatId,
+    pathname,
   ]);
 
   const uploadFile = async (file: File) => {
     const formData = new FormData();
-    formData.append('file', file);
+    formData.append("file", file);
 
     try {
-      const response = await fetch('/api/files/upload', {
-        method: 'POST',
+      const response = await fetch("/api/files/upload", {
+        method: "POST",
         body: formData,
       });
 
@@ -185,7 +194,7 @@ function PureChatForm({
       const { error } = await response.json();
       toast.error(error);
     } catch (error) {
-      toast.error('Failed to upload file, please try again!');
+      toast.error("Failed to upload file, please try again!");
     }
   };
 
@@ -199,7 +208,7 @@ function PureChatForm({
         const uploadPromises = files.map((file) => uploadFile(file));
         const uploadedAttachments = await Promise.all(uploadPromises);
         const successfullyUploadedAttachments = uploadedAttachments.filter(
-          (attachment) => attachment !== undefined,
+          (attachment) => attachment !== undefined
         );
 
         setAttachments((currentAttachments) => [
@@ -207,12 +216,12 @@ function PureChatForm({
           ...successfullyUploadedAttachments,
         ]);
       } catch (error) {
-        console.error('Error uploading files!', error);
+        console.error("Error uploading files!", error);
       } finally {
         setUploadQueue([]);
       }
     },
-    [setAttachments],
+    [setAttachments]
   );
 
   const toggleModelMenu = () => {
@@ -242,7 +251,7 @@ function PureChatForm({
         <div className="duration-100 relative w-full max-w-[50rem] ring-2 ring-border ring-inset overflow-hidden bg-sidebar @container/input hover:ring-card-border-focus hover:bg-input-hover focus-within:ring-1 focus-within:ring-input-border-focus hover:focus-within:ring-input-border-focus pb-12 px-2 @[480px]/input:px-3 rounded-2xl">
           <div className="relative z-10">
             <span className="absolute px-2 @[480px]/input:px-3 py-5 text-neutral-300 pointer-events-none">
-              {!input && 'What do you want to know?'}
+              {!input && "What do you want to know?"}
             </span>
             <textarea
               dir="auto"
@@ -250,14 +259,14 @@ function PureChatForm({
               value={input}
               onChange={handleInput}
               className="w-full px-2 @[480px]/input:px-3 bg-transparent focus:outline-none text-primary-foreground align-bottom min-h-14 pt-5 my-0 mb-5"
-              style={{ resize: 'none' }}
+              style={{ resize: "none" }}
               onKeyDown={(event) => {
-                if (event.key === 'Enter' && !event.shiftKey) {
+                if (event.key === "Enter" && !event.shiftKey) {
                   event.preventDefault();
 
                   if (isLoading) {
                     toast.error(
-                      'Please wait for the model to finish its response!',
+                      "Please wait for the model to finish its response!"
                     );
                   } else if (input.trim()) {
                     submitForm();
@@ -287,7 +296,7 @@ function PureChatForm({
 
             <div
               className="flex grow gap-1.5 max-w-full justify-end"
-              style={{ transform: 'none', opacity: 1 }}
+              style={{ transform: "none", opacity: 1 }}
             >
               <div className="flex items-center relative" ref={modelMenuRef}>
                 <button
@@ -329,7 +338,11 @@ function PureChatForm({
                   }}
                 >
                   <div
-                    className={`h-9 relative aspect-square flex flex-col items-center justify-center rounded-full ring-inset before:absolute before:inset-0 before:rounded-full before:bg-neutral-600 before:ring-0 before:transition-all duration-500 bg-neutral-700 text-secondary-foreground before:[clip-path:circle(0%_at_50%_50%)] ${input.trim() && uploadQueue.length === 0 ? 'hover:before:[clip-path:circle(100%_at_50%_50%)] hover:text-white' : ''} ring-0`}
+                    className={`h-9 relative aspect-square flex flex-col items-center justify-center rounded-full ring-inset before:absolute before:inset-0 before:rounded-full before:bg-neutral-600 before:ring-0 before:transition-all duration-500 bg-neutral-700 text-secondary-foreground before:[clip-path:circle(0%_at_50%_50%)] ${
+                      input.trim() && uploadQueue.length === 0
+                        ? "hover:before:[clip-path:circle(100%_at_50%_50%)] hover:text-white"
+                        : ""
+                    } ring-0`}
                   >
                     <ArrowUpIcon className="h-5 w-5" />
                   </div>

@@ -13,3 +13,4 @@ export { default as SearchList } from './search-list';
 export { default as TimerIcon } from './timer';
 export { default as FileScript } from './file-script';
 export { default as GreekHalmet } from './greek-halmet';
+export { default as GitLab } from './gitlab';

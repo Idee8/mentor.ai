@@ -1,15 +1,15 @@
-import { cookies } from 'next/headers';
+import { cookies } from "next/headers";
 
-import { Header } from './header';
-import { generateUUID } from '@/lib/utils';
-import { Form } from './form';
-import { DEFAULT_CHAT_MODEL } from '@/ai/models';
+import { Header } from "./header";
+import { generateUUID } from "@/lib/utils";
+import { Form } from "./form";
+import { DEFAULT_CHAT_MODEL } from "@/ai/models";
 
 export default async function DashboardPage() {
   const id = generateUUID();
 
   const cookieStore = await cookies();
-  const modelFromCookie = cookieStore.get('chat-model');
+  const modelFromCookie = cookieStore.get("chat-model");
 
   return (
     <div className="w-full flex flex-col h-full">

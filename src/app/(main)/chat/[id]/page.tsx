@@ -1,12 +1,12 @@
-import { cookies } from 'next/headers';
-import { notFound } from 'next/navigation';
+import { cookies } from "next/headers";
+import { notFound } from "next/navigation";
 
-import { Chat } from '@/components/chat';
-import { getChatById, getMessagesByChatId } from '@/db/queries';
-import { convertToUIMessages } from '@/lib/utils';
-import { DEFAULT_CHAT_MODEL } from '@/ai/models';
-import { ChatPageProvider } from '@/components/chat-provider';
-import { DataStreamHandler } from '@/components/data-stream-handler';
+import { Chat } from "@/components/chat";
+import { getChatById, getMessagesByChatId } from "@/db/queries";
+import { convertToUIMessages } from "@/lib/utils";
+import { DEFAULT_CHAT_MODEL } from "@/ai/models";
+import { ChatPageProvider } from "@/components/chat-provider";
+import { DataStreamHandler } from "@/components/data-stream-handler";
 
 interface Props {
   params: Promise<{
@@ -28,7 +28,7 @@ export default async function ChatPage(props: Props) {
   });
 
   const cookieStore = await cookies();
-  const chatModelFromCookie = cookieStore.get('chat-model');
+  const chatModelFromCookie = cookieStore.get("chat-model");
 
   if (!chatModelFromCookie) {
     return (
