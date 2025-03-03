@@ -97,7 +97,7 @@ export function Testimonials() {
       <div className="flex flex-col items-center gap-8 mb-6">
         <p className="uppercase text-primary">Customer Love</p>
         <h2 className="sm:text-5xl text-4xl font-serif text-balance font-medium text-center">
-          Join other empwowered developers
+          Join other empowered developers
         </h2>
         <p className="sm:text-xl text-lg text-center max-w-3xl">
           Mentor has helped developers understand over 100+ codebases. From
