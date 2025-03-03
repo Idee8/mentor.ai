@@ -3,7 +3,6 @@
   <h2 align="center">
     Mentor AI
   </h2>
-
   <p align="center">
     Your AI-powered coding mentor for personalized guidance and learning
     <br />
@@ -17,6 +16,9 @@
     <a href="https://github.com/idee8/mentor.ai/issues">Issues</a>
   </p>
 </p>
+<p align="center">
+    <img src="https://github.com/user-attachments/assets/3975a55b-e3ae-4724-8ea1-694e90f1b641" alt="Mentor AI"/>
+  </p>
 
 ## About the Project
 
