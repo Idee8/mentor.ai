@@ -49,7 +49,7 @@ export function Features() {
         </div>
         <div className="p-4 space-y-2">
           <p className="font-serif text-2xl font-medium">
-            Multilangual Support
+            Multilingual Support
           </p>
           <p className="text-base text-muted-foreground">
             Mentor can understand more than 30 popular programming languages
