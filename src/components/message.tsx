@@ -12,7 +12,7 @@ import { cn } from '@/lib/utils';
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
 import { Button } from './ui/button';
 import { Markdown } from './markdown';
-import { GreekHalmet } from './icons';
+import { Hexagon } from 'lucide-react';
 
 const PurePreviewMessage = ({
   chatId,
@@ -40,7 +40,7 @@ const PurePreviewMessage = ({
   return (
     <AnimatePresence>
       <motion.div
-        className="w-full mx-auto max-w-3xl px-4 group/message"
+        className="w-full mx-auto max-w-3xl px-4 py-4 group/message"
         initial={{ y: 5, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         data-role={message.role}
@@ -57,7 +57,7 @@ const PurePreviewMessage = ({
           {message.role === 'assistant' && (
             <div className="size-8 flex items-center rounded-full justify-center ring-1 shrink-0 ring-border bg-background">
               <div className="translate-y-px">
-                <GreekHalmet className="h-4" />
+                <Hexagon className="h-4" />
               </div>
             </div>
           )}
@@ -83,7 +83,7 @@ const PurePreviewMessage = ({
 
                 <div
                   className={cn('flex flex-col gap-4', {
-                    'bg-primary text-primary-foreground px-3 py-2 rounded-xl':
+                    'bg-primary text-primary-foreground px-4 py-2 rounded-l-xl rounded-r-sm':
                       message.role === 'user',
                   })}
                 >

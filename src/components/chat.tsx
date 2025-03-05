@@ -4,40 +4,43 @@ import type { Attachment, Message } from 'ai';
 import { useChat } from '@ai-sdk/react';
 import { useState } from 'react';
 import useSWR, { useSWRConfig } from 'swr';
-
-import { ChatHeader } from '@/components/chat-header';
-import type { Vote } from '@/db/schema';
-import { fetcher, generateUUID } from '@/lib/utils';
-
-import { ChatForm } from './chat-form';
 import { toast } from 'sonner';
+
+import type { Chat as DBChat, Vote } from '@/db/schema';
+import { fetcher, generateUUID } from '@/lib/utils';
+import { ChatForm } from './chat-form';
 import type { VisibilityType } from './visibility-selector';
-import { useChatContext } from './chat-provider';
 import { Messages } from './messages';
+import { ChatHeader } from './chat-header';
+import { Header } from './header';
 
 export function Chat({
   id,
   initialMessages,
   selectedChatModel,
+  isReadonly,
+  chat,
 }: {
   id: string;
   initialMessages: Array<Message>;
   selectedChatModel: string;
   selectedVisibilityType: VisibilityType;
+  isReadonly: boolean;
+  chat?: DBChat;
 }) {
   const { mutate } = useSWRConfig();
-  const { chat, user } = useChatContext();
 
   const {
     messages,
     setMessages,
     handleSubmit,
+    handleInputChange,
     input,
     setInput,
     append,
-    isLoading,
     stop,
     reload,
+    status,
   } = useChat({
     id,
     body: { id, selectedChatModel: selectedChatModel },
@@ -62,36 +65,33 @@ export function Chat({
 
   return (
     <>
-      <div className="flex flex-col min-w-0 h-dvh bg-background">
-        <ChatHeader chat={chat} />
-
+      {messages.length > 0 && chat ? <ChatHeader chat={chat} /> : <Header />}
+      <div className="relative px-6 mb-6 md:mb-0 pb-36 md:pb-48 w-[768px] max-w-full h-full mx-auto flex flex-col space-y-3 md:space-y-4">
         <Messages
           chatId={id}
-          isLoading={isLoading}
+          isLoading={status === 'streaming'}
           votes={votes}
           messages={messages}
           setMessages={setMessages}
           reload={reload}
-          isReadonly={chat.userId !== user?.id}
+          isReadonly={isReadonly}
         />
-
-        <div className="flex mx-auto px-4 bg-background pb-4 md:pb-6 gap-2 w-full">
-          {!(chat.userId !== user?.id) && (
-            <ChatForm
-              chatId={id}
-              input={input}
-              setInput={setInput}
-              handleSubmit={handleSubmit}
-              isLoading={isLoading}
-              stop={stop}
-              attachments={attachments}
-              setAttachments={setAttachments}
-              messages={messages}
-              setMessages={setMessages}
-              append={append}
-            />
-          )}
-        </div>
+        {!isReadonly && (
+          <ChatForm
+            chatId={id}
+            input={input}
+            setInput={setInput}
+            handleInputChange={handleInputChange}
+            handleSubmit={handleSubmit}
+            isLoading={status === 'streaming'}
+            stop={stop}
+            attachments={attachments}
+            setAttachments={setAttachments}
+            messages={messages}
+            setMessages={setMessages}
+            append={append}
+          />
+        )}
       </div>
     </>
   );

@@ -84,9 +84,8 @@ export default function Sidebar() {
 
   return (
     <div
-      className={`
-        bg-sidebar flex flex-col transition-all duration-300 ease-in-out border-r border-border
-        ${expanded ? 'w-[250px]' : 'items-center w-[80px]'}
+      className={`sticky top-0 h-screen bg-sidebar flex flex-col transition-all duration-300 ease-in-out border-r border-border
+        ${expanded ? 'w-[300px]' : 'items-center w-[100px]'}
       `}
     >
       <div

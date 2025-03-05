@@ -8,16 +8,15 @@ import {
   type SetStateAction,
 } from 'react';
 import { Command } from 'cmdk';
-import { Search, Trash, Edit, LogOut } from 'lucide-react';
+import useSWR from 'swr';
+import { Search, Trash, Edit, LogOut, RefreshCw } from 'lucide-react';
 import { AnimatePresence } from 'motion/react';
 import * as motion from 'motion/react-client';
-import { FileScript, TimerIcon } from './icons';
+import { useRouter } from 'next/navigation';
 
-type Conversation = {
-  id: string;
-  title: string;
-  timestamp: Date;
-};
+import { FileScript, TimerIcon } from './icons';
+import type { Chat } from '@/db/schema';
+import { fetcher } from '@/lib/utils';
 
 export default function History({
   open,
@@ -32,42 +31,22 @@ export default function History({
     null,
   );
   const modalRef = useRef<HTMLDivElement>(null);
-
-  // Simulated conversations data
-  const [conversations, setConversations] = useState<Conversation[]>([
-    {
-      id: '1',
-      title: 'Bitcoin Performance in Economic Crises',
-      timestamp: new Date(Date.now() - 10 * 60 * 1000), // 10 minutes ago
-    },
-    {
-      id: '2',
-      title: 'Best AI Model Comparison',
-      timestamp: new Date(Date.now() - 16 * 60 * 60 * 1000), // 16 hours ago
-    },
-    {
-      id: '3',
-      title: 'New conversation',
-      timestamp: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000), // 5 days ago
-    },
-    {
-      id: '4',
-      title: 'IoT and Protocols: HTTP, MQTT, RFID Tech',
-      timestamp: new Date(
-        Date.now() - 5 * 24 * 60 * 60 * 1000 - 30 * 60 * 1000,
-      ), // 5 days and 30 minutes ago
-    },
-    {
-      id: '5',
-      title: 'VTP: VLAN Management and Optimization',
-      timestamp: new Date(
-        Date.now() - 5 * 24 * 60 * 60 * 1000 - 3 * 60 * 60 * 1000,
-      ), // 5 days and 3 hours ago
-    },
-  ]);
+  const {
+    data: conversations,
+    isLoading,
+    error,
+  } = useSWR<Array<Chat>>(`/api/history`, fetcher, {
+    revalidateOnFocus: false,
+    shouldRetryOnError: true,
+    errorRetryInterval: 3000,
+    errorRetryCount: 2,
+  });
+  const router = useRouter();
 
   // Format relative time for display
-  const formatTimeAgo = (date: Date): string => {
+  const formatTimeAgo = (timestamp: string | Date): string => {
+    const date =
+      typeof timestamp === 'string' ? new Date(timestamp) : timestamp;
     const now = new Date();
     const diffMs = now.getTime() - date.getTime();
     const diffMinutes = Math.floor(diffMs / (1000 * 60));
@@ -84,7 +63,7 @@ export default function History({
   };
 
   // Automatically categorize conversations based on timestamp
-  const categorizeConversations = (conversations: Conversation[]) => {
+  const categorizeConversations = (conversations: Chat[]) => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
@@ -97,7 +76,7 @@ export default function History({
     return conversations.reduce(
       (acc, conversation) => {
         let category = 'Older';
-        const conversationDate = new Date(conversation.timestamp);
+        const conversationDate = new Date(conversation.createdAt);
         conversationDate.setHours(0, 0, 0, 0);
 
         if (conversationDate.getTime() === today.getTime()) {
@@ -114,12 +93,12 @@ export default function History({
 
         acc[category].push({
           ...conversation,
-          timeAgo: formatTimeAgo(conversation.timestamp),
+          timeAgo: formatTimeAgo(conversation.createdAt),
         });
 
         return acc;
       },
-      {} as Record<string, (Conversation & { timeAgo: string })[]>,
+      {} as Record<string, (Chat & { timeAgo: string })[]>,
     );
   };
 
@@ -172,19 +151,46 @@ export default function History({
     };
   }, [open]);
 
+  if (isLoading) {
+    return (
+      <div className="fixed inset-0 bg-neutral-800/40 backdrop-blur-sm z-50 flex items-center justify-center">
+        <div className="flex items-center space-x-2 text-gray-300">
+          <RefreshCw className="animate-spin" />
+          <span>Loading conversations...</span>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="fixed inset-0 bg-neutral-800/40 backdrop-blur-sm z-50 flex items-center justify-center">
+        <div className="text-center text-red-400">
+          <p>Failed to load conversations</p>
+          <button
+            type="button"
+            onClick={() => window.location.reload()}
+            className="mt-4 px-4 py-2 bg-neutral-700 rounded hover:bg-neutral-600"
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   // Filter conversations based on search
   const filteredConversations = search
-    ? conversations.filter((conversation) =>
+    ? (conversations ?? []).filter((conversation) =>
         conversation.title.toLowerCase().includes(search.toLowerCase()),
       )
-    : conversations;
+    : (conversations ?? []);
 
   // Group filtered conversations by category
   const groupedConversations = categorizeConversations(filteredConversations);
 
   function handleSelect(id: string) {
-    const conversation = conversations.find((c) => c.id === id);
-    console.log('Selected:', conversation?.title);
+    router.push(`/chat/${id}`);
     setOpen(false);
   }
 
@@ -195,7 +201,7 @@ export default function History({
 
   function handleDelete(id: string) {
     console.log('Deleting conversation:', id);
-    setConversations(conversations.filter((c) => c.id !== id));
+    // Implement actual delete logic here
   }
 
   function handleEdit(id: string) {
@@ -206,6 +212,9 @@ export default function History({
   function toggleMoreActions() {
     setShowMoreActions(!showMoreActions);
   }
+
+  // Render empty state if no conversations
+  const hasConversations = conversations && conversations.length > 0;
 
   return (
     <>
@@ -264,7 +273,7 @@ export default function History({
                 {showMoreActions && (
                   <>
                     <Command.Item
-                      onSelect={() => console.log('Export all conversations')}
+                      onSelect={() => console.log('Attach files')}
                       className="flex items-center gap-2 px-2 py-3 text-gray-200 rounded-md cursor-pointer aria-selected:bg-neutral-800"
                     >
                       <div className="flex items-center justify-center h-6 w-6 rounded">
@@ -273,7 +282,7 @@ export default function History({
                       <span>Attach files</span>
                     </Command.Item>
                     <Command.Item
-                      onSelect={() => console.log('Export all conversations')}
+                      onSelect={() => console.log('Sign out')}
                       className="flex items-center gap-2 px-2 py-3 text-gray-200 rounded-md cursor-pointer aria-selected:bg-neutral-800"
                     >
                       <div className="flex items-center justify-center h-6 w-6 rounded">
@@ -284,61 +293,61 @@ export default function History({
                   </>
                 )}
 
-                {Object.entries(groupedConversations).map(
-                  ([category, items]) => (
-                    <div key={category}>
-                      <div className="px-2 pt-4 pb-1 text-xs font-medium text-gray-400">
-                        {category}
-                      </div>
-                      {items.map((item) => (
-                        <Command.Item
-                          key={item.id}
-                          onSelect={() => handleSelect(item.id)}
-                          onMouseEnter={() => setHoveredConversation(item.id)}
-                          onMouseLeave={() => setHoveredConversation(null)}
-                          className="flex items-center justify-between px-2 py-3 text-gray-200 rounded-md cursor-pointer group aria-selected:bg-neutral-800"
-                        >
-                          <span className="truncate flex-grow">
-                            {item.title}
-                          </span>
-                          <div className="flex items-center">
-                            <span className="text-xs text-gray-400 mr-2">
-                              {item.timeAgo}
+                {hasConversations ? (
+                  Object.entries(groupedConversations).map(
+                    ([category, items]) => (
+                      <div key={category}>
+                        <div className="px-2 pt-4 pb-1 text-xs font-medium text-gray-400">
+                          {category}
+                        </div>
+                        {items.map((item) => (
+                          <Command.Item
+                            key={item.id}
+                            onSelect={() => handleSelect(item.id)}
+                            onMouseEnter={() => setHoveredConversation(item.id)}
+                            onMouseLeave={() => setHoveredConversation(null)}
+                            className="flex items-center justify-between px-2 py-3 text-gray-200 rounded-md cursor-pointer group aria-selected:bg-neutral-800"
+                          >
+                            <span className="truncate flex-grow">
+                              {item.title}
                             </span>
-                            <div
-                              className={`flex space-x-1 transition-opacity ${hoveredConversation === item.id ? 'opacity-100' : 'opacity-0'}`}
-                            >
-                              <button
-                                type="button"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleEdit(item.id);
-                                }}
-                                className="p-1 hover:bg-gray-600 rounded"
-                                title="Edit"
+                            <div className="flex items-center">
+                              <span className="text-xs text-gray-400 mr-2">
+                                {item.timeAgo}
+                              </span>
+                              <div
+                                className={`flex space-x-1 transition-opacity ${hoveredConversation === item.id ? 'opacity-100' : 'opacity-0'}`}
                               >
-                                <Edit size={14} className="text-gray-300" />
-                              </button>
-                              <button
-                                type="button"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleDelete(item.id);
-                                }}
-                                className="p-1 hover:bg-gray-600 rounded"
-                                title="Delete"
-                              >
-                                <Trash size={14} className="text-gray-300" />
-                              </button>
+                                <button
+                                  type="button"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleEdit(item.id);
+                                  }}
+                                  className="p-1 hover:bg-gray-600 rounded"
+                                  title="Edit"
+                                >
+                                  <Edit size={14} className="text-gray-300" />
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleDelete(item.id);
+                                  }}
+                                  className="p-1 hover:bg-gray-600 rounded"
+                                  title="Delete"
+                                >
+                                  <Trash size={14} className="text-gray-300" />
+                                </button>
+                              </div>
                             </div>
-                          </div>
-                        </Command.Item>
-                      ))}
-                    </div>
-                  ),
-                )}
-
-                {Object.keys(groupedConversations).length === 0 && (
+                          </Command.Item>
+                        ))}
+                      </div>
+                    ),
+                  )
+                ) : (
                   <div className="px-2 py-6 text-center text-neutral-400">
                     No conversations found
                   </div>

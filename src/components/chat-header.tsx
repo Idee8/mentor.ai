@@ -1,6 +1,6 @@
 'use client';
 
-import { Bookmark, Clock1, MoreHorizontal, Share } from 'lucide-react';
+import { Clock1, Share } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { format } from 'date-fns';
 
@@ -25,7 +25,7 @@ export const ChatHeader: React.FC<{ chat: Chat }> = ({ chat }) => {
   return (
     <div
       className={cn(
-        'flex justify-between items-center border-b border-border p-4 sticky top-0',
+        'flex justify-between z-50 items-center border-b border-border p-4 sticky top-0',
         scrolled ? 'bg-background/70 backdrop-blur' : '',
       )}
     >
@@ -37,14 +37,6 @@ export const ChatHeader: React.FC<{ chat: Chat }> = ({ chat }) => {
         <p>{chat.title}</p>
       </div>
       <div className="flex justify-end gap-4 px-4 items-center text-neutral-300">
-        <MoreHorizontal className={cn('cursor-pointer')} />
-
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Bookmark className={cn('cursor-pointer')} />
-          </TooltipTrigger>
-          <TooltipContent>Save to Library</TooltipContent>
-        </Tooltip>
         <Tooltip>
           <TooltipTrigger asChild>
             <SearchList

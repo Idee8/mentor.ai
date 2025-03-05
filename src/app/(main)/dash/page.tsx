@@ -1,30 +1,42 @@
-import { cookies } from "next/headers";
+import { cookies } from 'next/headers';
 
-import { Header } from "./header";
-import { generateUUID } from "@/lib/utils";
-import { Form } from "./form";
-import { DEFAULT_CHAT_MODEL } from "@/ai/models";
+import { generateUUID } from '@/lib/utils';
+import { Chat } from '@/components/chat';
+import { DataStreamHandler } from '@/components/data-stream-handler';
+import { DEFAULT_CHAT_MODEL } from '@/ai/models';
 
 export default async function DashboardPage() {
   const id = generateUUID();
 
   const cookieStore = await cookies();
-  const modelFromCookie = cookieStore.get("chat-model");
+  const modelFromCookie = cookieStore.get('chat-model');
 
-  return (
-    <div className="w-full flex flex-col h-full">
-      <Header />
-      <div className="flex flex-1 flex-col items-center justify-center w-full px-4 py-12 max-w-5xl mx-auto">
-        <h1 className="text-3xl font-medium mb-12">
-          How can I help you today?
-        </h1>
-
-        <Form
+  if (!modelFromCookie) {
+    return (
+      <>
+        <Chat
+          key={id}
           id={id}
           initialMessages={[]}
-          selectedChatModel={modelFromCookie?.name || DEFAULT_CHAT_MODEL}
+          selectedChatModel={DEFAULT_CHAT_MODEL}
+          selectedVisibilityType="private"
+          isReadonly={false}
         />
-      </div>
-    </div>
+        <DataStreamHandler id={id} />
+      </>
+    );
+  }
+
+  return (
+    <>
+      <Chat
+        id={id}
+        initialMessages={[]}
+        isReadonly={false}
+        selectedChatModel={modelFromCookie?.value}
+        selectedVisibilityType="private"
+      />
+      <DataStreamHandler id={id} />
+    </>
   );
 }
