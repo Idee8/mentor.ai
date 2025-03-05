@@ -79,7 +79,7 @@ export default function LoginPage() {
               {
                 email: email,
                 password: password,
-                callbackURL: '/dash',
+                callbackURL: '/chat',
               },
               {
                 onRequest: () => setIsLoading(true),
@@ -180,7 +180,7 @@ export default function LoginPage() {
               onClick={async () =>
                 await signIn.social({
                   provider: 'github',
-                  callbackURL: '/dash',
+                  callbackURL: '/chat',
                 })
               }
             >
@@ -194,7 +194,7 @@ export default function LoginPage() {
               onClick={async () => {
                 await signIn.social({
                   provider: 'gitlab',
-                  callbackURL: '/dash',
+                  callbackURL: '/chat',
                 });
               }}
             >

@@ -118,7 +118,7 @@ export const NavbarLeft: React.FC = () => {
           </ButtonLink>
         </>
       ) : (
-        <ButtonLink href={'/dash'} className="rounded-md">
+        <ButtonLink href={'/chat'} className="rounded-md">
           Go to app
         </ButtonLink>
       )}

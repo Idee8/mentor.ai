@@ -72,7 +72,7 @@ type MenuItem = {
 
 // Sidebar Items
 const menuItems: MenuItem[] = [
-  { icon: <CpuIcon />, label: 'Home', path: '/dash', active: true },
+  { icon: <CpuIcon />, label: 'Home', path: '/chat', active: true },
   { icon: <Telescope />, label: 'Discover', path: '/discover' },
   { icon: <Astroid />, label: 'Spaces', path: '/spaces' },
   { icon: <DocumentAttachment />, label: 'Documents', path: '/documents' },
@@ -94,7 +94,7 @@ export default function Sidebar() {
           expanded ? 'justify-between' : 'justify-center',
         )}
       >
-        <Link href="/dash" className="flex items-center">
+        <Link href="/chat" className="flex items-center">
           <div>
             <Hexagon className={cn(expanded ? 'h-7 w-7' : 'h-10 w-10')} />
           </div>
@@ -116,7 +116,7 @@ export default function Sidebar() {
       <div className="mt-4 px-3">
         {expanded && (
           <button
-            onClick={() => router.push('/dash')}
+            onClick={() => router.push('/chat')}
             type="button"
             className="flex w-full items-center gap-2 rounded-3xl border-2 border-border hover:border-primary/60 bg-neutral-950 py-2 px-4 text-sm text-neutral-300"
           >
@@ -128,7 +128,7 @@ export default function Sidebar() {
           <Tooltip>
             <TooltipTrigger asChild>
               <Link
-                href={'/dash'}
+                href={'/chat'}
                 className="w-10 h-10 flex justify-center items-center p-2 rounded-full bg-neutral-800"
               >
                 <PlusIcon />

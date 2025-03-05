@@ -80,7 +80,7 @@ export default function RegisterPage() {
                 email: email,
                 password: password,
                 name: `user-${generateUUID().slice(0, 4)}`,
-                callbackURL: '/dash',
+                callbackURL: '/chat',
               },
               {
                 onRequest: () => setIsLoading(true),
@@ -179,7 +179,7 @@ export default function RegisterPage() {
               onClick={async () =>
                 await signIn.social({
                   provider: 'github',
-                  callbackURL: '/dash',
+                  callbackURL: '/chat',
                 })
               }
             >
@@ -193,7 +193,7 @@ export default function RegisterPage() {
               onClick={async () => {
                 await signIn.social({
                   provider: 'gitlab',
-                  callbackURL: '/dash',
+                  callbackURL: '/chat',
                 });
               }}
             >
