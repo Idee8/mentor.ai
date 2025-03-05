@@ -9,7 +9,7 @@ import { toast } from 'sonner';
 import type { Chat as DBChat, Vote } from '@/db/schema';
 import { fetcher, generateUUID } from '@/lib/utils';
 import { ChatForm } from './chat-form';
-import type { VisibilityType } from './visibility-selector';
+import type { VisibilityType } from './chat-share';
 import { Messages } from './messages';
 import { ChatHeader } from './chat-header';
 import { Header } from './header';

@@ -1,12 +1,15 @@
 'use server';
 
+import { generateText, type Message } from 'ai';
+import { cookies } from 'next/headers';
+
 import { myProvider } from '@/ai/models';
+import type { VisibilityType } from '@/components/chat-share';
 import {
   deleteMessagesByChatIdAfterTimestamp,
   getMessageById,
+  updateChatVisibilityById,
 } from '@/db/queries';
-import { generateText, type Message } from 'ai';
-import { cookies } from 'next/headers';
 
 export async function saveChatModelAsCookie(model: string) {
   const cookieStore = await cookies();
@@ -37,4 +40,14 @@ export async function deleteTrailingMessages({ id }: { id: string }) {
     chatId: message.id,
     timestamp: message.createdAt,
   });
+}
+
+export async function updateChatVisibility({
+  chatId,
+  visibility,
+}: {
+  chatId: string;
+  visibility: VisibilityType;
+}) {
+  await updateChatVisibilityById({ chatId, visibility });
 }

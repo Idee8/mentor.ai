@@ -1,8 +1,10 @@
 'use client';
 
-import { Clock1, Share } from 'lucide-react';
+import { Clock1, Link } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { format } from 'date-fns';
+import { useCopyToClipboard } from 'usehooks-ts';
+import { toast } from 'sonner';
 
 import History from '@/components/history';
 import { SearchList } from '@/components/icons';
@@ -12,15 +14,30 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
-import { Button } from './ui/button';
 import { useScroll } from '@/hooks/use-scroll';
 import type { Chat } from '@/db/schema';
+import { ChatShare } from './chat-share';
+import { Button } from './ui/button';
+import { BASE_URL } from '@/lib/constants';
 
 export const ChatHeader: React.FC<{ chat: Chat }> = ({ chat }) => {
   const [openHistory, setOpenHistory] = useState(false);
   const scrolled = useScroll(50);
 
   const dt = useMemo(() => new Date(chat.createdAt), [chat.createdAt]);
+
+  const [, copy] = useCopyToClipboard();
+
+  const handleCopy = (text: string) => () => {
+    copy(text)
+      .then(() => {
+        toast(`Link Copied: ${text}`, { duration: 1000 });
+      })
+      .catch((error) => {
+        console.error('Failed to copy!', error);
+        toast('Failed to copy link');
+      });
+  };
 
   return (
     <div
@@ -46,10 +63,20 @@ export const ChatHeader: React.FC<{ chat: Chat }> = ({ chat }) => {
           </TooltipTrigger>
           <TooltipContent>History</TooltipContent>
         </Tooltip>
-        <Button size={'sm'} className="rounded-full">
-          Share
-          <Share />
-        </Button>
+        {chat.visibility === 'public' && (
+          <Tooltip>
+            <TooltipTrigger>
+              <Button
+                size={'sm'}
+                onClick={handleCopy(`${BASE_URL}/chat/${chat.id}`)}
+              >
+                <Link />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Copy Link</TooltipContent>
+          </Tooltip>
+        )}
+        <ChatShare chatId={chat.id} selectedVisibilityType={chat.visibility} />
         {openHistory && <History open={openHistory} setOpen={setOpenHistory} />}
       </div>
     </div>
