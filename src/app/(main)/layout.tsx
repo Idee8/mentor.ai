@@ -6,7 +6,7 @@ import AppSidebar, { SidebarProvider } from '@/components/app-sidebar';
 import { auth } from '@/lib/auth';
 
 export const metadata: Metadata = {
-  title: { absolute: 'Mentor', template: '%s | Mentor AI' },
+  title: { absolute: 'Mentor AI', template: '%s | Mentor AI' },
 };
 
 export default async function DashboardLayout({

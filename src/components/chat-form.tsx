@@ -24,6 +24,7 @@ import equal from 'fast-deep-equal';
 import { usePathname } from 'next/navigation';
 import { Button } from './ui/button';
 import { ArrowUp, MessageCirclePlus, Square } from 'lucide-react';
+import { FileScript, Github } from './icons';
 
 export interface ChatFormProps {
   chatId: string;
@@ -47,6 +48,7 @@ export interface ChatFormProps {
     chatRequestOptions?: ChatRequestOptions,
   ) => void;
   className?: string;
+  selectedModelId: string;
 }
 
 function PureChatForm({
@@ -63,6 +65,7 @@ function PureChatForm({
   append = async () => null,
   handleSubmit = () => {},
   className,
+  selectedModelId,
 }: ChatFormProps) {
   const pathname = usePathname();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -141,7 +144,7 @@ function PureChatForm({
           }
         }}
       >
-        <div className="relative flex flex-col w-full gap-2 bg-sidebar rounded-3xl border border-input ring-2 ring-border ring-inset overflow-hidden @container/input hover:ring-card-border-focus hover:bg-input-hover focus-within:ring-1 focus-within:ring-input-border-focus hover:focus-within:ring-input-border-focus pt-2 px-2 @[480px]/input:px-3">
+        <div className="relative flex flex-col w-full gap-2 bg-neutral-900 rounded-3xl border border-neutral-900 ring-2 ring-neutral-900 ring-inset overflow-hidden @container/input hover:ring-card-border-focus hover:bg-input-hover focus-within:ring-1 focus-within:ring-input-border-focus hover:focus-within:ring-input-border-focus pt-2 px-2 @[480px]/input:px-3">
           <textarea
             ref={textareaRef}
             name="input"
@@ -177,8 +180,24 @@ function PureChatForm({
           {/* Bottom menu area */}
           <div className="flex items-center justify-between p-2">
             <div className="flex items-center gap-2">
-              {/* <ModelSelector models={models || []} />
-              <SearchModeToggle /> */}
+              <Button
+                type={isLoading ? 'button' : 'submit'}
+                size={'icon'}
+                variant={'outline'}
+                className={'rounded-full'}
+                onClick={() => {}}
+              >
+                <Github />
+              </Button>
+              <Button
+                type={isLoading ? 'button' : 'submit'}
+                size={'icon'}
+                variant={'outline'}
+                className={'rounded-full'}
+                onClick={() => {}}
+              >
+                <FileScript className="h-5 w-5" />
+              </Button>
             </div>
             <div className="flex items-center gap-2">
               {messages.length > 0 && (

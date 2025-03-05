@@ -55,8 +55,6 @@ export function Chat({
     },
   });
 
-  console.log(isReadonly);
-
   const { data: votes } = useSWR<Array<Vote>>(
     `/api/vote?chatId=${id}`,
     fetcher,
@@ -92,6 +90,7 @@ export function Chat({
             messages={messages}
             setMessages={setMessages}
             append={append}
+            selectedModelId={selectedChatModel}
           />
         )}
       </div>
