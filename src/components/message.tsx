@@ -13,6 +13,8 @@ import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
 import { Button } from './ui/button';
 import { Markdown } from './markdown';
 import { Hexagon } from 'lucide-react';
+import { MessageEditor } from './message-editor';
+import { MessageActions } from './message-actions';
 
 const PurePreviewMessage = ({
   chatId,
@@ -92,9 +94,32 @@ const PurePreviewMessage = ({
               </div>
             )}
 
-            {/* TODO: Message editor */}
+            {message.content && mode === 'edit' && (
+              <div className="flex flex-row gap-2 items-start">
+                <div className="size-8" />
+
+                <MessageEditor
+                  key={message.id}
+                  message={message}
+                  setMode={setMode}
+                  setMessages={setMessages}
+                  reload={reload}
+                />
+              </div>
+            )}
 
             {/* TODO: Tool messages */}
+            <div className="flex gap-4">
+              {!isReadonly && (
+                <MessageActions
+                  key={`action-${message.id}`}
+                  chatId={chatId}
+                  message={message}
+                  vote={vote}
+                  isLoading={isLoading}
+                />
+              )}
+            </div>
           </div>
         </div>
       </motion.div>

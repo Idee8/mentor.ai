@@ -83,7 +83,7 @@ const ChatHeaderVisibility: React.FC<{
   const handleCopy = (text: string) => () => {
     copy(text)
       .then(() => {
-        toast(`Link Copied: ${text}`, { duration: 1000 });
+        toast(`Copied to clipboard`, { duration: 1000 });
       })
       .catch((error) => {
         console.error('Failed to copy!', error);

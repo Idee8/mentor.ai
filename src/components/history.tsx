@@ -9,12 +9,12 @@ import {
 } from 'react';
 import { Command } from 'cmdk';
 import useSWR from 'swr';
-import { Search, Trash, Edit, LogOut, RefreshCw } from 'lucide-react';
+import { Search, LogOut, RefreshCw } from 'lucide-react';
 import { AnimatePresence } from 'motion/react';
 import * as motion from 'motion/react-client';
 import { useRouter } from 'next/navigation';
 
-import { FileScript, TimerIcon } from './icons';
+import { TimerIcon } from './icons';
 import type { Chat } from '@/db/schema';
 import { fetcher } from '@/lib/utils';
 
@@ -122,12 +122,6 @@ export default function History({
         e.preventDefault();
         handleDelete(hoveredConversation);
       }
-
-      // Cmd+E or Ctrl+E to edit selected conversation
-      if (e.key === 'e' && (e.metaKey || e.ctrlKey) && hoveredConversation) {
-        e.preventDefault();
-        handleEdit(hoveredConversation);
-      }
     };
 
     document.addEventListener('keydown', handleKeyDown);
@@ -195,18 +189,12 @@ export default function History({
   }
 
   function createNewChat() {
-    console.log('Creating new temporary chat');
     setOpen(false);
   }
 
   function handleDelete(id: string) {
     console.log('Deleting conversation:', id);
     // Implement actual delete logic here
-  }
-
-  function handleEdit(id: string) {
-    console.log('Editing conversation:', id);
-    // Implementation for editing conversation title would go here
   }
 
   function toggleMoreActions() {
@@ -271,26 +259,15 @@ export default function History({
                 </Command.Item>
 
                 {showMoreActions && (
-                  <>
-                    <Command.Item
-                      onSelect={() => console.log('Attach files')}
-                      className="flex items-center gap-2 px-2 py-3 text-gray-200 rounded-md cursor-pointer aria-selected:bg-neutral-800"
-                    >
-                      <div className="flex items-center justify-center h-6 w-6 rounded">
-                        <FileScript className="h-4 w-4" />
-                      </div>
-                      <span>Attach files</span>
-                    </Command.Item>
-                    <Command.Item
-                      onSelect={() => console.log('Sign out')}
-                      className="flex items-center gap-2 px-2 py-3 text-gray-200 rounded-md cursor-pointer aria-selected:bg-neutral-800"
-                    >
-                      <div className="flex items-center justify-center h-6 w-6 rounded">
-                        <LogOut size={16} />
-                      </div>
-                      <span>Sign out</span>
-                    </Command.Item>
-                  </>
+                  <Command.Item
+                    onSelect={() => console.log('Sign out')}
+                    className="flex items-center gap-2 px-2 py-3 text-gray-200 rounded-md cursor-pointer aria-selected:bg-neutral-800"
+                  >
+                    <div className="flex items-center justify-center h-6 w-6 rounded">
+                      <LogOut size={16} />
+                    </div>
+                    <span>Sign out</span>
+                  </Command.Item>
                 )}
 
                 {hasConversations ? (
@@ -315,32 +292,6 @@ export default function History({
                               <span className="text-xs text-gray-400 mr-2">
                                 {item.timeAgo}
                               </span>
-                              <div
-                                className={`flex space-x-1 transition-opacity ${hoveredConversation === item.id ? 'opacity-100' : 'opacity-0'}`}
-                              >
-                                <button
-                                  type="button"
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleEdit(item.id);
-                                  }}
-                                  className="p-1 hover:bg-gray-600 rounded"
-                                  title="Edit"
-                                >
-                                  <Edit size={14} className="text-gray-300" />
-                                </button>
-                                <button
-                                  type="button"
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleDelete(item.id);
-                                  }}
-                                  className="p-1 hover:bg-gray-600 rounded"
-                                  title="Delete"
-                                >
-                                  <Trash size={14} className="text-gray-300" />
-                                </button>
-                              </div>
                             </div>
                           </Command.Item>
                         ))}

@@ -124,7 +124,10 @@ export async function getVotesByChatId({ id }: { id: string }) {
 export async function deleteMessagesByChatIdAfterTimestamp({
   chatId,
   timestamp,
-}: { chatId: string; timestamp: Date }) {
+}: {
+  chatId: string;
+  timestamp: Date;
+}) {
   try {
     const messagesToDelete = await db
       .select({ id: message.id })
@@ -150,7 +153,7 @@ export async function deleteMessagesByChatIdAfterTimestamp({
     }
   } catch (error) {
     console.error(
-      'failed to delete messages by id after timestamp from database',
+      'Failed to delete messages by id after timestamp from database',
     );
     throw error;
   }
