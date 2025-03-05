@@ -12,7 +12,6 @@ import { ChatForm } from './chat-form';
 import type { VisibilityType } from './chat-share';
 import { Messages } from './messages';
 import { ChatHeader } from './chat-header';
-import { Header } from './header';
 
 export function Chat({
   id,
@@ -52,6 +51,7 @@ export function Chat({
       mutate('/api/history');
     },
     onError: (error) => {
+      console.log(error);
       toast.error('An error occured, please try again!');
     },
   });
@@ -65,7 +65,7 @@ export function Chat({
 
   return (
     <>
-      {messages.length > 0 && chat ? <ChatHeader chat={chat} /> : <Header />}
+      <ChatHeader chat={chat} />
       <div className="relative px-6 mb-6 md:mb-0 pb-36 md:pb-48 w-[768px] max-w-full h-full mx-auto flex flex-col space-y-3 md:space-y-4">
         <Messages
           chatId={id}
