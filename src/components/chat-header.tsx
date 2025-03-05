@@ -65,7 +65,7 @@ export const ChatHeader: React.FC<{ chat: Chat }> = ({ chat }) => {
         </Tooltip>
         {chat.visibility === 'public' && (
           <Tooltip>
-            <TooltipTrigger>
+            <TooltipTrigger asChild>
               <Button
                 size={'sm'}
                 onClick={handleCopy(`${BASE_URL}/chat/${chat.id}`)}
