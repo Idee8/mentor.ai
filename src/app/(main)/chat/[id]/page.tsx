@@ -66,7 +66,6 @@ export default async function ChatPage(props: Props) {
           selectedChatModel={DEFAULT_CHAT_MODEL}
           selectedVisibilityType={chat.visibility}
           isReadonly={authSession?.user?.id !== chat.userId}
-          chat={chat}
         />
         <DataStreamHandler id={id} />
       </>
@@ -81,7 +80,6 @@ export default async function ChatPage(props: Props) {
         selectedChatModel={chatModelFromCookie.value}
         selectedVisibilityType={chat.visibility}
         isReadonly={authSession?.user?.id !== chat.userId}
-        chat={chat}
       />
       <DataStreamHandler id={id} />
     </>

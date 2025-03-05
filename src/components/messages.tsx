@@ -1,7 +1,7 @@
 import type { Vote } from '@/db/schema';
 import { useScrollToBottom } from '@/hooks/use-scroll-bottom';
 import type { ChatRequestOptions, Message } from 'ai';
-import { PreviewMessage } from './message';
+import { PreviewMessage, ThinkingMessage } from './message';
 import { memo } from 'react';
 import equal from 'fast-deep-equal';
 
@@ -52,6 +52,10 @@ function PureMessages({
       ))}
 
       {/* TODO: Thinking message */}
+
+      {isLoading &&
+        messages.length > 0 &&
+        messages[messages.length - 1].role === 'user' && <ThinkingMessage />}
 
       <div
         ref={messagesEndRef}

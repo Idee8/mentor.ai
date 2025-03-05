@@ -13,16 +13,22 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { cn } from '@/lib/utils';
+import { cn, fetcher } from '@/lib/utils';
 import { useScroll } from '@/hooks/use-scroll';
-import type { Chat } from '@/db/schema';
 import { ChatShare, type VisibilityType } from './chat-share';
 import { Button } from './ui/button';
 import { BASE_URL } from '@/lib/constants';
+import useSWR from 'swr';
+import type { Chat } from '@/db/schema';
 
-export const ChatHeader: React.FC<{ chat?: Chat }> = ({ chat }) => {
+export const ChatHeader: React.FC<{ id: string }> = ({ id }) => {
   const [openHistory, setOpenHistory] = useState(false);
   const scrolled = useScroll(50);
+  const { data: chat, isLoading } = useSWR<Chat>(`/api/chat/${id}`, fetcher);
+
+  if (isLoading || !chat) {
+    return null;
+  }
 
   return (
     <div
@@ -31,7 +37,7 @@ export const ChatHeader: React.FC<{ chat?: Chat }> = ({ chat }) => {
         scrolled ? 'bg-background/70 backdrop-blur' : '',
       )}
     >
-      {chat && <ChatHeaderInfo createdAt={chat.createdAt} title={chat.title} />}
+      <ChatHeaderInfo createdAt={chat.createdAt} title={chat.title} />
       <div className="flex justify-end gap-4 px-4 items-center text-neutral-300">
         <Tooltip>
           <TooltipTrigger asChild>
@@ -42,9 +48,7 @@ export const ChatHeader: React.FC<{ chat?: Chat }> = ({ chat }) => {
           </TooltipTrigger>
           <TooltipContent>History</TooltipContent>
         </Tooltip>
-        {chat && (
-          <ChatHeaderVisibility id={chat.id} visibility={chat.visibility} />
-        )}
+        <ChatHeaderVisibility id={chat.id} visibility={chat.visibility} />
         {openHistory && <History open={openHistory} setOpen={setOpenHistory} />}
       </div>
     </div>

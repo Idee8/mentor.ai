@@ -82,10 +82,14 @@ const PurePreviewMessage = ({
                 )}
 
                 <div
-                  className={cn('flex flex-col gap-4', {
-                    'bg-primary text-primary-foreground px-4 py-2 rounded-l-xl rounded-r-sm':
-                      message.role === 'user',
-                  })}
+                  className={cn(
+                    'flex flex-col gap-4',
+                    {
+                      'bg-primary text-primary-foreground px-4 py-2 rounded-l-xl rounded-r-sm prose':
+                        message.role === 'user',
+                    },
+                    'prose-sm prose-neutral relative prose-a:no-underline prose-h1:text-2xl',
+                  )}
                 >
                   <Markdown>{message.content as string}</Markdown>
                 </div>
@@ -121,3 +125,34 @@ export const PreviewMessage = memo(
     return true;
   },
 );
+
+export const ThinkingMessage = () => {
+  const role = 'assistant';
+
+  return (
+    <motion.div
+      className="w-full mx-auto max-w-3xl px-4 group/message "
+      initial={{ y: 5, opacity: 0 }}
+      animate={{ y: 0, opacity: 1, transition: { delay: 1 } }}
+      data-role={role}
+    >
+      <div
+        className={cn(
+          'flex gap-4 group-data-[role=user]/message:px-3 w-full group-data-[role=user]/message:w-fit group-data-[role=user]/message:ml-auto group-data-[role=user]/message:max-w-2xl group-data-[role=user]/message:py-2 rounded-xl',
+          {
+            'group-data-[role=user]/message:bg-muted': true,
+          },
+        )}
+      >
+        <div className="size-8 flex items-center rounded-full justify-center ring-1 shrink-0 ring-border">
+          <Hexagon className="h-4" />
+        </div>
+        <div className="flex flex-col w-full">
+          <div className="flex flex-col gap-4 text-muted-foreground">
+            Thinking...
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  );
+};

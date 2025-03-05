@@ -6,26 +6,25 @@ import { useState } from 'react';
 import useSWR, { useSWRConfig } from 'swr';
 import { toast } from 'sonner';
 
-import type { Chat as DBChat, Vote } from '@/db/schema';
+import type { Vote } from '@/db/schema';
 import { fetcher, generateUUID } from '@/lib/utils';
 import { ChatForm } from './chat-form';
 import type { VisibilityType } from './chat-share';
 import { Messages } from './messages';
 import { ChatHeader } from './chat-header';
+import { Header } from './header';
 
 export function Chat({
   id,
   initialMessages,
   selectedChatModel,
   isReadonly,
-  chat,
 }: {
   id: string;
   initialMessages: Array<Message>;
   selectedChatModel: string;
   selectedVisibilityType: VisibilityType;
   isReadonly: boolean;
-  chat?: DBChat;
 }) {
   const { mutate } = useSWRConfig();
 
@@ -37,9 +36,9 @@ export function Chat({
     input,
     setInput,
     append,
+    isLoading,
     stop,
     reload,
-    status,
   } = useChat({
     id,
     body: { id, selectedChatModel: selectedChatModel },
@@ -65,11 +64,12 @@ export function Chat({
 
   return (
     <>
-      <ChatHeader chat={chat} />
+      {messages.length > 0 && <ChatHeader id={id} />}
+      {messages.length === 0 && <Header />}
       <div className="relative px-6 mb-6 md:mb-0 pb-36 md:pb-48 w-[768px] max-w-full h-full mx-auto flex flex-col space-y-3 md:space-y-4">
         <Messages
           chatId={id}
-          isLoading={status === 'streaming'}
+          isLoading={isLoading}
           votes={votes}
           messages={messages}
           setMessages={setMessages}
@@ -83,7 +83,7 @@ export function Chat({
             setInput={setInput}
             handleInputChange={handleInputChange}
             handleSubmit={handleSubmit}
-            isLoading={status === 'streaming'}
+            isLoading={isLoading}
             stop={stop}
             attachments={attachments}
             setAttachments={setAttachments}
