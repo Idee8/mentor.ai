@@ -1,3 +1,11 @@
+import {
+  createDataStreamResponse,
+  type JSONValue,
+  type Message,
+  smoothStream,
+  streamText,
+} from 'ai';
+
 import { myProvider } from '@/ai/models';
 import { getWeather } from '@/ai/tools/get-weather';
 import { systemPrompt } from '@/ai/prompts';
@@ -14,22 +22,18 @@ import {
   getMostRecentUserMessage,
   sanitizeResponseMessages,
 } from '@/lib/utils';
-import {
-  createDataStreamResponse,
-  type Message,
-  smoothStream,
-  streamText,
-} from 'ai';
 
 export async function POST(request: Request) {
   const {
     id,
     messages,
     selectedChatModel,
+    selectedFilePathnames,
   }: {
     id: string;
     messages: Array<Message>;
     selectedChatModel: string;
+    selectedFilePathnames: Record<string, JSONValue>;
   } = await request.json();
 
   const session = await auth.api.getSession({ headers: request.headers });
@@ -68,6 +72,9 @@ export async function POST(request: Request) {
         experimental_generateMessageId: generateUUID,
         tools: {
           getWeather,
+        },
+        providerOptions: {
+          files: selectedFilePathnames,
         },
         onFinish: async ({ response, reasoning }) => {
           if (session.user.id) {

@@ -71,9 +71,38 @@ export default {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
         marquee: 'marquee var(--duration) infinite linear',
+        'fade-up': 'fade-up 0.5s',
+        'fade-down': 'fade-down 0.5s',
+        'fade-in': 'fade-in 0.2s ease-out forwards',
         'marquee-vertical': 'marquee-vertical var(--duration) linear infinite',
       },
       keyframes: {
+        'fade-up': {
+          '0%': {
+            opacity: '0',
+            transform: 'translateY(10px)',
+          },
+          '80%': {
+            opacity: '0.6',
+          },
+          '100%': {
+            opacity: '1',
+            transform: 'translateY(0px)',
+          },
+        },
+        'fade-down': {
+          '0%': {
+            opacity: '0',
+            transform: 'translateY(-10px)',
+          },
+          '80%': {
+            opacity: '0.6',
+          },
+          '100%': {
+            opacity: '1',
+            transform: 'translateY(0px)',
+          },
+        },
         blob: {
           '0%': {
             transform: 'translate(0px, 0px) scale(1)',

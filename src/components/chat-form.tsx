@@ -25,6 +25,9 @@ import { usePathname } from 'next/navigation';
 import { Button } from './ui/button';
 import { ArrowUp, MessageCirclePlus, Square } from 'lucide-react';
 import { FileScript, Github } from './icons';
+import { AnimatePresence } from 'motion/react';
+import { Files } from './files-modal';
+import { useAppContext } from '@/app/providers';
 
 export interface ChatFormProps {
   chatId: string;
@@ -68,11 +71,12 @@ function PureChatForm({
   selectedModelId,
 }: ChatFormProps) {
   const pathname = usePathname();
+  const { setSelectedFilePathnames, selectedFilePathnames } = useAppContext();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const { width } = useWindowSize();
-  const modelMenuRef = useRef<HTMLDivElement>(null);
   const [isComposing, setIsComposing] = useState(false); // Composition state
   const [enterDisabled, setEnterDisabled] = useState(false); // Disable Enter after composition ends
+  const [isFilesVisible, setIsFilesVisible] = useState(false);
 
   const handleCompositionStart = () => setIsComposing(true);
 
@@ -127,7 +131,7 @@ function PureChatForm({
     >
       {messages.length === 0 && (
         <div className="flex flex-col items-center justify-center p-8 mb-0 md:mb-6 space-y-4">
-          <h1 className="text-3xl font-medium mb-12">
+          <h1 className="text-3xl font-medium animate-fade-down">
             How can I help you today?
           </h1>
         </div>
@@ -181,7 +185,7 @@ function PureChatForm({
           <div className="flex items-center justify-between p-2">
             <div className="flex items-center gap-2">
               <Button
-                type={isLoading ? 'button' : 'submit'}
+                type={'button'}
                 size={'icon'}
                 variant={'outline'}
                 className={'rounded-full'}
@@ -190,11 +194,13 @@ function PureChatForm({
                 <Github />
               </Button>
               <Button
-                type={isLoading ? 'button' : 'submit'}
+                type={'button'}
                 size={'icon'}
                 variant={'outline'}
                 className={'rounded-full'}
-                onClick={() => {}}
+                onClick={() => {
+                  setIsFilesVisible(!isFilesVisible);
+                }}
               >
                 <FileScript className="h-5 w-5" />
               </Button>
@@ -226,6 +232,15 @@ function PureChatForm({
           </div>
         </div>
       </form>
+      <AnimatePresence>
+        {isFilesVisible && (
+          <Files
+            setIsFilesVisible={setIsFilesVisible}
+            selectedFilePathnames={selectedFilePathnames}
+            setSelectedFilePathnames={setSelectedFilePathnames}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }

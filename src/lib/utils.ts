@@ -218,3 +218,37 @@ export function getMostRecentUserMessage(messages: Array<Message>) {
   const userMessages = messages.filter((message) => message.role === 'user');
   return userMessages.at(-1);
 }
+
+export const getFileContentFromUrl = async (url: string): Promise<string> => {
+  try {
+    if (!url || typeof url !== 'string') {
+      throw new Error('Invalid URL provided');
+    }
+
+    // timeout to prevent hanging requests
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 20000); // 20 second timeout
+
+    const response = await fetch(url, {
+      signal: controller.signal,
+      headers: {
+        'Cache-Control': 'no-cache',
+      },
+    });
+
+    clearTimeout(timeoutId);
+
+    if (!response.ok) {
+      throw new Error(
+        `Failed to fetch file: ${response.status} ${response.statusText}`,
+      );
+    }
+
+    return await response.text();
+  } catch (error) {
+    console.error('Error fetching file content:', error);
+    throw error instanceof Error
+      ? error
+      : new Error('Unknown error occurred while fetching file');
+  }
+};

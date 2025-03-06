@@ -6,18 +6,28 @@ import {
   extractReasoningMiddleware,
   wrapLanguageModel,
 } from 'ai';
+import { ragMiddleware } from './ragMiddleware';
 
-export const DEFAULT_CHAT_MODEL: string = 'chat-model-google-small';
+export const DEFAULT_CHAT_MODEL: string = 'chat-model-google-large';
 
 export const myProvider = customProvider({
   languageModels: {
     'chat-model-openai-small': openai('gpt-4o-mini'),
     'chat-model-openai-large': openai('gpt-4o'),
-    'chat-model-google-small': google('gemini-1.5-pro'),
-    'chat-model-google-large': google('gemini-2.0-flash-001'),
+    'chat-model-google-small': wrapLanguageModel({
+      model: google('gemini-1.5-flash'),
+      middleware: [ragMiddleware],
+    }),
+    'chat-model-google-large': wrapLanguageModel({
+      model: google('gemini-2.0-flash-001'),
+      middleware: [ragMiddleware],
+    }),
     'chat-model-reasoning': wrapLanguageModel({
       model: fireworks('accounts/fireworks/models/deepseek-v3'),
-      middleware: extractReasoningMiddleware({ tagName: 'think' }),
+      middleware: [
+        extractReasoningMiddleware({ tagName: 'think' }),
+        ragMiddleware,
+      ],
     }),
     'title-model': google('gemini-1.5-pro'),
     'artifact-model': openai('gpt-4o-mini'),
@@ -25,6 +35,10 @@ export const myProvider = customProvider({
   imageModels: {
     'small-model': openai.image('dall-e-2'),
     'large-model': openai.image('dall-e-3'),
+  },
+  textEmbeddingModels: {
+    google: google.textEmbeddingModel('text-embedding-004'),
+    openai: openai.textEmbeddingModel('text-embedding-3-small'),
   },
 });
 

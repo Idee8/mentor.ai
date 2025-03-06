@@ -4,6 +4,7 @@ import { Toaster } from 'sonner';
 import { Analytics } from '@vercel/analytics/react';
 
 import './globals.css';
+import { Providers } from './providers';
 
 const interSans = Inter({
   variable: '--font-inter',
@@ -44,7 +45,7 @@ export default function RootLayout({
       >
         <Analytics />
         <Toaster />
-        {children}
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

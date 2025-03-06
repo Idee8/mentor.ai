@@ -1,6 +1,7 @@
 import { and, asc, desc, eq, gte, inArray } from 'drizzle-orm';
 import { db } from './index';
 import { chat, message, vote, type Message } from './schema';
+import { chunk } from './schema/chunk';
 
 export async function saveChat({
   id,
@@ -172,4 +173,23 @@ export async function updateChatVisibilityById({
     console.error('Failed to update chat visibility in database');
     throw error;
   }
+}
+
+export async function insertChunks({ chunks }: { chunks: any[] }) {
+  return await db.insert(chunk).values(chunks);
+}
+
+export async function getChunksByFilePaths({
+  filePaths,
+}: { filePaths: Array<string> }) {
+  return await db
+    .select()
+    .from(chunk)
+    .where(inArray(chunk.filePath, filePaths));
+}
+
+export async function deleteChunksByFilePath({
+  filePath,
+}: { filePath: string }) {
+  return await db.delete(chunk).where(eq(chunk.filePath, filePath));
 }

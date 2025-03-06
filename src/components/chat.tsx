@@ -13,6 +13,7 @@ import type { VisibilityType } from './chat-share';
 import { Messages } from './messages';
 import { ChatHeader } from './chat-header';
 import { Header } from './header';
+import { useAppContext } from '@/app/providers';
 
 export function Chat({
   id,
@@ -27,6 +28,7 @@ export function Chat({
   isReadonly: boolean;
 }) {
   const { mutate } = useSWRConfig();
+  const { selectedFilePathnames } = useAppContext();
 
   const {
     messages,
@@ -41,7 +43,7 @@ export function Chat({
     reload,
   } = useChat({
     id,
-    body: { id, selectedChatModel: selectedChatModel },
+    body: { id, selectedChatModel: selectedChatModel, selectedFilePathnames },
     initialMessages,
     experimental_throttle: 100,
     sendExtraMessageFields: true,
