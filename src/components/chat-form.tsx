@@ -189,6 +189,7 @@ function PureChatForm({
                 size={'icon'}
                 variant={'outline'}
                 className={'rounded-full'}
+                disabled={true}
                 onClick={() => {}}
               >
                 <Github />
