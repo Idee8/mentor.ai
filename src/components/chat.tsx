@@ -126,7 +126,6 @@ export function Chat({
               setInput={setInput}
               handleInputChange={handleInputChange}
               handleSubmit={handleSubmit}
-              isLoading={false}
               stop={stop}
               attachments={attachments}
               setAttachments={setAttachments}
@@ -136,6 +135,7 @@ export function Chat({
               selectedModelId={selectedChatModel}
               lastSubmittedQueryRef={lastSubmittedQueryRef}
               setHasSubmitted={setHasSubmitted}
+              resetSuggestedQuestions={resetSuggestedQuestions}
             />
           )}
         </AnimatePresence>

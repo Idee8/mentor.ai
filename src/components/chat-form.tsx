@@ -18,25 +18,41 @@ import {
   memo,
 } from 'react';
 import { useWindowSize } from 'usehooks-ts';
+import { ArrowUp } from 'lucide-react';
 import * as motion from 'motion/react-client';
+import equal from 'fast-deep-equal';
 
 import { cn } from '@/lib/utils';
-
-import equal from 'fast-deep-equal';
 import { usePathname } from 'next/navigation';
 import { Button } from './ui/button';
-import { ArrowUp, Square } from 'lucide-react';
 import { FileScript, Github } from './icons';
 import { AnimatePresence } from 'motion/react';
 import { Files } from './files-modal';
 import { useAppContext } from '@/app/providers';
+
+const StopIcon = ({ size = 16 }: { size?: number }) => {
+  return (
+    <svg
+      height={size}
+      viewBox="0 0 16 16"
+      width={size}
+      style={{ color: 'currentcolor' }}
+    >
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M3 3H13V13H3V3Z"
+        fill="currentColor"
+      />
+    </svg>
+  );
+};
 
 export interface ChatFormProps {
   chatId: string;
   input?: string;
   setInput?: (value: string) => void;
   handleInputChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
-  isLoading?: boolean;
   stop?: () => void;
   attachments?: Array<Attachment>;
   setAttachments?: Dispatch<SetStateAction<Array<Attachment>>>;
@@ -56,6 +72,7 @@ export interface ChatFormProps {
   status: 'submitted' | 'streaming' | 'ready' | 'error';
   selectedModelId: string;
   lastSubmittedQueryRef: RefObject<string>;
+  resetSuggestedQuestions: () => void;
   setHasSubmitted: Dispatch<SetStateAction<boolean>>;
 }
 
@@ -76,6 +93,7 @@ function PureChatForm({
   selectedModelId,
   lastSubmittedQueryRef,
   setHasSubmitted,
+  resetSuggestedQuestions,
 }: ChatFormProps) {
   const pathname = usePathname();
   const { setSelectedFilePathnames, selectedFilePathnames } = useAppContext();
@@ -122,6 +140,7 @@ function PureChatForm({
     });
 
     setAttachments([]);
+    resetSuggestedQuestions();
 
     if (width && width > 768) {
       textareaRef.current?.focus();
@@ -220,16 +239,36 @@ function PureChatForm({
               </Button>
             </div>
             <div className="flex items-center gap-2">
-              <Button
-                type={isProcessing ? 'button' : 'submit'}
-                size={'icon'}
-                variant={'outline'}
-                className={cn(isProcessing && 'animate-pulse', 'rounded-full')}
-                disabled={input.length === 0 && !isProcessing}
-                onClick={isProcessing ? stop : undefined}
-              >
-                {isProcessing ? <Square size={20} /> : <ArrowUp size={20} />}
-              </Button>
+              {isProcessing ? (
+                <Button
+                  type={'button'}
+                  size={'icon'}
+                  variant={'destructive'}
+                  className={'rounded-full animate-pulse p-1.5 h-8 w-8'}
+                  onClick={(event) => {
+                    event.preventDefault();
+                    stop();
+                  }}
+                >
+                  <StopIcon size={14} />
+                </Button>
+              ) : (
+                <Button
+                  type="submit"
+                  className="rounded-full p-1.5 h-8 w-8"
+                  variant={'outline'}
+                  onClick={(event) => {
+                    event.preventDefault();
+                    submitForm();
+                  }}
+                  disabled={
+                    (input.length === 0 && attachments.length === 0) ||
+                    status !== 'ready'
+                  }
+                >
+                  <ArrowUp />
+                </Button>
+              )}
             </div>
           </div>
         </div>
@@ -248,8 +287,11 @@ function PureChatForm({
 }
 
 export const ChatForm = memo(PureChatForm, (prevProps, nextProps) => {
+  if (prevProps.status !== nextProps.status) return false;
   if (prevProps.input !== nextProps.input) return false;
-  if (prevProps.isLoading !== nextProps.isLoading) return false;
+  if (prevProps.lastSubmittedQueryRef !== nextProps.lastSubmittedQueryRef)
+    return false;
+  if (prevProps.selectedModelId !== nextProps.selectedModelId) return false;
   if (!equal(prevProps.attachments, nextProps.attachments)) return false;
 
   return true;
