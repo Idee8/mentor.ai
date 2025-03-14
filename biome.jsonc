@@ -76,7 +76,8 @@
         "noUselessElse": "off" // Stylistic opinion
       },
       "suspicious": {
-        "noExplicitAny": "off" // We trust Vercelians to use any only when necessary
+        "noExplicitAny": "off", // We trust contributors to use any only when necessary,
+        "noArrayIndexKey": "off" // We allow the use the index as key when mapping over elements in React
       },
       "nursery": {
         "noStaticElementInteractions": "off",

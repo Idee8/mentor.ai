@@ -8,7 +8,10 @@ const nextConfig: NextConfig = {
     ignoreDuringBuilds: true,
   },
   images: {
-    remotePatterns: [{ hostname: 'avatars.githubusercontent.com' }],
+    remotePatterns: [
+      { hostname: 'avatars.githubusercontent.com' },
+      { hostname: 'www.google.com' },
+    ],
   },
 };
 

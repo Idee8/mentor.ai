@@ -14,16 +14,18 @@ import {
   useCallback,
   type Dispatch,
   type SetStateAction,
+  type RefObject,
   memo,
 } from 'react';
 import { useWindowSize } from 'usehooks-ts';
+import * as motion from 'motion/react-client';
 
 import { cn } from '@/lib/utils';
 
 import equal from 'fast-deep-equal';
 import { usePathname } from 'next/navigation';
 import { Button } from './ui/button';
-import { ArrowUp, MessageCirclePlus, Square } from 'lucide-react';
+import { ArrowUp, Square } from 'lucide-react';
 import { FileScript, Github } from './icons';
 import { AnimatePresence } from 'motion/react';
 import { Files } from './files-modal';
@@ -51,14 +53,17 @@ export interface ChatFormProps {
     chatRequestOptions?: ChatRequestOptions,
   ) => void;
   className?: string;
+  status: 'submitted' | 'streaming' | 'ready' | 'error';
   selectedModelId: string;
+  lastSubmittedQueryRef: RefObject<string>;
+  setHasSubmitted: Dispatch<SetStateAction<boolean>>;
 }
 
 function PureChatForm({
   chatId,
   input = '',
   setInput = () => {},
-  isLoading = false,
+  status,
   stop = () => {},
   attachments = [],
   handleInputChange,
@@ -69,6 +74,8 @@ function PureChatForm({
   handleSubmit = () => {},
   className,
   selectedModelId,
+  lastSubmittedQueryRef,
+  setHasSubmitted,
 }: ChatFormProps) {
   const pathname = usePathname();
   const { setSelectedFilePathnames, selectedFilePathnames } = useAppContext();
@@ -121,8 +128,14 @@ function PureChatForm({
     }
   }, [attachments, handleSubmit, setAttachments, width, chatId, pathname]);
 
+  const isProcessing = status === 'submitted' || status === 'streaming';
+
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 20 }}
+      transition={{ duration: 0.5 }}
       className={cn(
         messages.length > 0
           ? 'w-[45rem] max-w-full bg-background flex flex-col items-center fixed bottom-0 -translate-x-[1.5rem] md:translate-x-0 h-fit px-4 md:px-[unset] pb-1 md:max-w-[calc(100%-3rem-var(--sidebar-width))]'
@@ -138,8 +151,8 @@ function PureChatForm({
       )}
       <form
         className={cn(
-          'max-w-3xl w-full mx-auto relative rounded-3xl p-2',
-          messages.length > 0 ? 'p-2' : 'px-6',
+          'max-w-3xl w-full mx-auto relative rounded-3xl',
+          messages.length > 0 ? '' : 'px-6',
         )}
         onSubmit={(e) => {
           e.preventDefault();
@@ -148,7 +161,7 @@ function PureChatForm({
           }
         }}
       >
-        <div className="relative flex flex-col w-full gap-2 bg-neutral-900 rounded-3xl border border-neutral-900 ring-2 ring-neutral-900 ring-inset overflow-hidden @container/input hover:ring-card-border-focus hover:bg-input-hover focus-within:ring-1 focus-within:ring-input-border-focus hover:focus-within:ring-input-border-focus pt-2 px-2 @[480px]/input:px-3">
+        <div className="relative flex flex-col w-full gap-2 bg-neutral-900/80 rounded-lg border border-neutral-900 ring-2 ring-neutral-900 ring-inset overflow-hidden @container/input hover:ring-card-border-focus hover:bg-input-hover focus-within:ring-1 focus-within:ring-input-border-focus hover:focus-within:ring-input-border-focus pt-2 px-2 @[480px]/input:px-3">
           <textarea
             ref={textareaRef}
             name="input"
@@ -207,27 +220,15 @@ function PureChatForm({
               </Button>
             </div>
             <div className="flex items-center gap-2">
-              {messages.length > 0 && (
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={submitForm}
-                  className="shrink-0 rounded-full group"
-                  type="button"
-                  disabled={isLoading}
-                >
-                  <MessageCirclePlus className="size-4 group-hover:rotate-12 transition-all" />
-                </Button>
-              )}
               <Button
-                type={isLoading ? 'button' : 'submit'}
+                type={isProcessing ? 'button' : 'submit'}
                 size={'icon'}
                 variant={'outline'}
-                className={cn(isLoading && 'animate-pulse', 'rounded-full')}
-                disabled={input.length === 0 && !isLoading}
-                onClick={isLoading ? stop : undefined}
+                className={cn(isProcessing && 'animate-pulse', 'rounded-full')}
+                disabled={input.length === 0 && !isProcessing}
+                onClick={isProcessing ? stop : undefined}
               >
-                {isLoading ? <Square size={20} /> : <ArrowUp size={20} />}
+                {isProcessing ? <Square size={20} /> : <ArrowUp size={20} />}
               </Button>
             </div>
           </div>
@@ -242,7 +243,7 @@ function PureChatForm({
           />
         )}
       </AnimatePresence>
-    </div>
+    </motion.div>
   );
 }
 
