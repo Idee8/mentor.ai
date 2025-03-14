@@ -38,9 +38,12 @@ export const ChatHeader: React.FC<{ id: string }> = ({ id }) => {
         scrolled ? 'bg-background/70 backdrop-blur' : '',
       )}
     >
-      <ChatHistory openHistory={openHistory} setOpenHistory={setOpenHistory} />
       <ChatHeaderInfo createdAt={chat.createdAt} title={chat.title} />
       <div className="flex justify-end gap-4 px-4 items-center text-neutral-300">
+        <ChatHistory
+          openHistory={openHistory}
+          setOpenHistory={setOpenHistory}
+        />
         <ChatHeaderVisibility id={chat.id} visibility={chat.visibility} />
         {openHistory && <History open={openHistory} setOpen={setOpenHistory} />}
       </div>
