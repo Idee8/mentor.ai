@@ -29,6 +29,191 @@ import { FileScript, Github } from './icons';
 import { AnimatePresence } from 'motion/react';
 import { Files } from './files-modal';
 import { useAppContext } from '@/app/providers';
+import { mentorGroup, type MentorGroup, type MentorGroupId } from '@/ai/groups';
+import { HoverCard, HoverCardContent, HoverCardTrigger } from './ui/hover-card';
+
+interface SelectionContentProps {
+  selectedGroup: MentorGroupId;
+  onGroupSelect: (group: MentorGroup) => void;
+  status: 'submitted' | 'streaming' | 'ready' | 'error';
+  onExpandChange?: React.Dispatch<React.SetStateAction<boolean>>;
+}
+interface GroupSelectorProps {
+  selectedGroup: MentorGroupId;
+  onGroupSelect: (group: MentorGroup) => void;
+  status: 'submitted' | 'streaming' | 'ready' | 'error';
+  onExpandChange?: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+interface ToolbarButtonProps {
+  group: MentorGroup;
+  isSelected: boolean;
+  onClick: () => void;
+}
+
+const ToolbarButton = ({ group, isSelected, onClick }: ToolbarButtonProps) => {
+  const Icon = group.icon as any;
+  const { width } = useWindowSize();
+  const isMobile = width ? width < 768 : false;
+
+  const commonClassNames = cn(
+    'relative flex items-center justify-center',
+    'size-8',
+    'rounded-full',
+    'transition-colors duration-300',
+    isSelected
+      ? 'bg-background text-neutral-300'
+      : 'text-neutral-300 hover:bg-accent',
+  );
+
+  const handleClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    onClick();
+  };
+
+  // Use regular button for mobile
+  if (isMobile) {
+    return (
+      <button
+        type="button"
+        onClick={handleClick}
+        className={commonClassNames}
+        style={{ WebkitTapHighlightColor: 'transparent' }}
+      >
+        <Icon className="size-4" />
+      </button>
+    );
+  }
+
+  // Use motion.button for desktop
+  const button = (
+    <motion.button
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
+      onClick={handleClick}
+      className={commonClassNames}
+    >
+      <Icon className="size-4" />
+    </motion.button>
+  );
+
+  return (
+    <HoverCard openDelay={100} closeDelay={50}>
+      <HoverCardTrigger asChild>{button}</HoverCardTrigger>
+      <HoverCardContent
+        side="bottom"
+        align="center"
+        sideOffset={6}
+        className={cn(
+          'z-[100]',
+          'w-44 p-2 rounded-lg',
+          'border border-neutral-700',
+          'bg-neutral-800 shadow-md',
+          'transition-opacity duration-300',
+        )}
+      >
+        <div className="space-y-0.5">
+          <h4 className="text-sm font-medium text-neutral-100">{group.name}</h4>
+          <p className="text-xs text-neutral-400 leading-normal">
+            {group.description}
+          </p>
+        </div>
+      </HoverCardContent>
+    </HoverCard>
+  );
+};
+
+const SelectionContent = ({
+  onGroupSelect,
+  selectedGroup,
+  status,
+  onExpandChange,
+}: SelectionContentProps) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const isProcessing = status === 'submitted' || status === 'streaming';
+  const { width } = useWindowSize();
+  const isMobile = width ? width < 768 : false;
+
+  // Notify parent component when expansion state changes
+  useEffect(() => {
+    if (onExpandChange) {
+      // Only notify about expansion on mobile devices
+      onExpandChange(isMobile ? isExpanded : false);
+    }
+  }, [isExpanded, onExpandChange, isMobile]);
+
+  return (
+    <motion.div
+      layout={false}
+      initial={false}
+      animate={{
+        width: isExpanded && !isProcessing ? 'auto' : '30px',
+        gap: isExpanded && !isProcessing ? '0.5rem' : 0,
+        paddingRight: isExpanded && !isProcessing ? '0.25rem' : 0,
+      }}
+      transition={{ duration: 0.2, ease: 'easeInOut' }}
+      className={cn(
+        'inline-flex items-center min-w-[38px] p-0.5',
+        'rounded-full border border-neutral-800',
+        'bg-neutral-900 shadow-sm overflow-visible',
+        'relative z-10',
+        isProcessing && 'opacity-50 pointer-events-none',
+      )}
+      onMouseEnter={() => !isProcessing && setIsExpanded(true)}
+      onMouseLeave={() => !isProcessing && setIsExpanded(false)}
+    >
+      <AnimatePresence initial={false}>
+        {mentorGroup
+          .filter((group) => group.show)
+          .map((group, index, filteredGorups) => {
+            const showItem =
+              (isExpanded && !isProcessing) || selectedGroup === group.id;
+            const isLastItem = index === filteredGorups.length - 1;
+
+            return (
+              <motion.div
+                key={group.id}
+                layout={false}
+                animate={{
+                  width: showItem ? '28px' : 0,
+                  opacity: showItem ? 1 : 0,
+                  marginRight: showItem && isLastItem && isExpanded ? '2px' : 0,
+                }}
+                transition={{ duration: 0.15, ease: 'easeInOut' }}
+                className={cn(
+                  isLastItem && isExpanded && showItem ? 'pr-0.5' : '',
+                )}
+                style={{ margin: 0 }}
+              >
+                <ToolbarButton
+                  group={group}
+                  isSelected={selectedGroup === group.id}
+                  onClick={() => !isProcessing && onGroupSelect(group)}
+                />
+              </motion.div>
+            );
+          })}
+      </AnimatePresence>
+    </motion.div>
+  );
+};
+
+const GroupSelector = ({
+  selectedGroup,
+  onGroupSelect,
+  status,
+  onExpandChange,
+}: GroupSelectorProps) => {
+  return (
+    <SelectionContent
+      selectedGroup={selectedGroup}
+      onGroupSelect={onGroupSelect}
+      status={status}
+      onExpandChange={onExpandChange}
+    />
+  );
+};
 
 const StopIcon = ({ size = 16 }: { size?: number }) => {
   return (
@@ -71,13 +256,17 @@ export interface ChatFormProps {
   className?: string;
   status: 'submitted' | 'streaming' | 'ready' | 'error';
   selectedModelId: string;
+  selectedGroup: MentorGroupId;
   lastSubmittedQueryRef: RefObject<string>;
   resetSuggestedQuestions: () => void;
   setHasSubmitted: Dispatch<SetStateAction<boolean>>;
+  setSelectedGroup: React.Dispatch<React.SetStateAction<MentorGroupId>>;
 }
 
 function PureChatForm({
   chatId,
+  selectedGroup,
+  setSelectedGroup,
   input = '',
   setInput = () => {},
   status,
@@ -99,9 +288,11 @@ function PureChatForm({
   const { setSelectedFilePathnames, selectedFilePathnames } = useAppContext();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const { width } = useWindowSize();
+  const [isFocused, setIsFocused] = useState(false);
   const [isComposing, setIsComposing] = useState(false); // Composition state
   const [enterDisabled, setEnterDisabled] = useState(false); // Disable Enter after composition ends
   const [isFilesVisible, setIsFilesVisible] = useState(false);
+  const [isGroupSelectorExpanded, setIsGroupSelectorExpanded] = useState(false);
 
   const handleCompositionStart = () => setIsComposing(true);
 
@@ -129,6 +320,22 @@ function PureChatForm({
     }
   };
 
+  const handleGroupSelect = useCallback(
+    (group: MentorGroup) => {
+      setSelectedGroup(group.id);
+      textareaRef.current?.focus();
+    },
+    [setSelectedGroup, textareaRef],
+  );
+
+  const handleFocus = () => {
+    setIsFocused(true);
+  };
+
+  const handleBlur = () => {
+    setIsFocused(false);
+  };
+
   const submitForm = useCallback(() => {
     // Only update the URL without full navigation
     if (pathname !== `/chat/${chatId}`) {
@@ -148,6 +355,7 @@ function PureChatForm({
   }, [attachments, handleSubmit, setAttachments, width, chatId, pathname]);
 
   const isProcessing = status === 'submitted' || status === 'streaming';
+  const isMobile = width ? width < 768 : false;
 
   return (
     <motion.div
@@ -185,6 +393,8 @@ function PureChatForm({
             ref={textareaRef}
             name="input"
             rows={2}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
             tabIndex={0}
             onCompositionStart={handleCompositionStart}
             onCompositionEnd={handleCompositionEnd}
@@ -216,27 +426,53 @@ function PureChatForm({
           {/* Bottom menu area */}
           <div className="flex items-center justify-between p-2">
             <div className="flex items-center gap-2">
-              <Button
-                type={'button'}
-                size={'icon'}
-                variant={'outline'}
-                className={'rounded-full'}
-                disabled={true}
-                onClick={() => {}}
+              <div
+                className={cn(
+                  'absolute bottom-0 inset-x-0 flex justify-between items-center p-2 rounded-b-lg',
+                  isProcessing ? '!opacity-20 !cursor-not-allowed' : '',
+                )}
               >
-                <Github />
-              </Button>
-              <Button
-                type={'button'}
-                size={'icon'}
-                variant={'outline'}
-                className={'rounded-full'}
-                onClick={() => {
-                  setIsFilesVisible(!isFilesVisible);
-                }}
-              >
-                <FileScript className="h-5 w-5" />
-              </Button>
+                <div
+                  className={cn(
+                    'flex items-center gap-2',
+                    isMobile && 'overflow-hidden',
+                  )}
+                >
+                  <div
+                    className={cn(
+                      'transition-all duration-100 opacity-100 visible w-auto',
+                    )}
+                  >
+                    <GroupSelector
+                      selectedGroup={selectedGroup}
+                      onGroupSelect={handleGroupSelect}
+                      status={status}
+                      onExpandChange={setIsGroupSelectorExpanded}
+                    />
+                  </div>
+                  <Button
+                    type={'button'}
+                    size={'icon'}
+                    variant={'outline'}
+                    className={'rounded-full'}
+                    disabled={true}
+                    onClick={() => {}}
+                  >
+                    <Github />
+                  </Button>
+                  <Button
+                    type={'button'}
+                    size={'icon'}
+                    variant={'outline'}
+                    className={'rounded-full'}
+                    onClick={() => {
+                      setIsFilesVisible(!isFilesVisible);
+                    }}
+                  >
+                    <FileScript className="h-5 w-5" />
+                  </Button>
+                </div>
+              </div>
             </div>
             <div className="flex items-center gap-2">
               {isProcessing ? (

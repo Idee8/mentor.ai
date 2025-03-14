@@ -5,17 +5,18 @@ import { useChat, type UseChatOptions } from '@ai-sdk/react';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import useSWR, { useSWRConfig } from 'swr';
 import { toast } from 'sonner';
+import { AnimatePresence } from 'motion/react';
 
 import type { Vote } from '@/db/schema';
+import type { MentorGroupId } from '@/ai/groups';
+import type { VisibilityType } from './chat-share';
 import { fetcher, generateUUID } from '@/lib/utils';
 import { ChatForm } from './chat-form';
-import type { VisibilityType } from './chat-share';
 import { Messages } from './messages';
 import { ChatHeader } from './chat-header';
 import { Header } from './header';
 import { useAppContext } from '@/app/providers';
 import { suggestQuestions } from '@/app/actions';
-import { AnimatePresence } from 'motion/react';
 
 export function Chat({
   id,
@@ -34,6 +35,7 @@ export function Chat({
   const [suggestedQuestions, setSuggestedQuestions] = useState<string[]>([]);
   const lastSubmittedQueryRef = useRef('');
   const [hasSubmitted, setHasSubmitted] = useState(false);
+  const [selectedGroup, setSelectedGroup] = useState<MentorGroupId>('chat');
 
   const chatOptions: UseChatOptions = useMemo(
     () => ({
@@ -136,6 +138,8 @@ export function Chat({
               lastSubmittedQueryRef={lastSubmittedQueryRef}
               setHasSubmitted={setHasSubmitted}
               resetSuggestedQuestions={resetSuggestedQuestions}
+              selectedGroup={selectedGroup}
+              setSelectedGroup={setSelectedGroup}
             />
           )}
         </AnimatePresence>
