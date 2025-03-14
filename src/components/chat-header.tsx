@@ -1,7 +1,7 @@
 'use client';
 
 import { Clock1, Link } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { type Dispatch, type SetStateAction, useMemo, useState } from 'react';
 import { format } from 'date-fns';
 import { useCopyToClipboard } from 'usehooks-ts';
 import { toast } from 'sonner';
@@ -20,6 +20,7 @@ import { Button } from './ui/button';
 import { BASE_URL } from '@/lib/constants';
 import useSWR from 'swr';
 import type { Chat } from '@/db/schema';
+import { useSession } from '@/lib/auth-client';
 
 export const ChatHeader: React.FC<{ id: string }> = ({ id }) => {
   const [openHistory, setOpenHistory] = useState(false);
@@ -37,17 +38,9 @@ export const ChatHeader: React.FC<{ id: string }> = ({ id }) => {
         scrolled ? 'bg-background/70 backdrop-blur' : '',
       )}
     >
+      <ChatHistory openHistory={openHistory} setOpenHistory={setOpenHistory} />
       <ChatHeaderInfo createdAt={chat.createdAt} title={chat.title} />
       <div className="flex justify-end gap-4 px-4 items-center text-neutral-300">
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <SearchList
-              className={cn('cursor-pointer')}
-              onClick={() => setOpenHistory(!openHistory)}
-            />
-          </TooltipTrigger>
-          <TooltipContent>History</TooltipContent>
-        </Tooltip>
         <ChatHeaderVisibility id={chat.id} visibility={chat.visibility} />
         {openHistory && <History open={openHistory} setOpen={setOpenHistory} />}
       </div>
@@ -105,5 +98,26 @@ const ChatHeaderVisibility: React.FC<{
       )}
       <ChatShare chatId={id} selectedVisibilityType={visibility} />
     </>
+  );
+};
+
+const ChatHistory: React.FC<{
+  openHistory: boolean;
+  setOpenHistory: Dispatch<SetStateAction<boolean>>;
+}> = ({ setOpenHistory, openHistory }) => {
+  const { data, isPending } = useSession();
+  if (!data || isPending) {
+    return null;
+  }
+  return (
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <SearchList
+          className={cn('cursor-pointer')}
+          onClick={() => setOpenHistory(!openHistory)}
+        />
+      </TooltipTrigger>
+      <TooltipContent>History</TooltipContent>
+    </Tooltip>
   );
 };
