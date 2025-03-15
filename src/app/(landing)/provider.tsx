@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, Dispatch, SetStateAction } from 'react';
+import { createContext, type Dispatch, type SetStateAction } from 'react';
 import { useRequestAccessModal } from '@/components/landing';
 
 export const LandingContext = createContext<{

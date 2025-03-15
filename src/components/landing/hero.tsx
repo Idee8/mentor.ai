@@ -57,7 +57,7 @@ export function Hero() {
             size={'lg'}
             onClick={() => setShowRequestAccessModal(true)}
           >
-            Early Access - it's free
+            Get started - it's free
           </Button>
 
           <div className="flex gap-4 items-center sm:h-10 mt-4 cursor-pointer">

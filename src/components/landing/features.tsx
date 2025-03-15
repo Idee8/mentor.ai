@@ -65,10 +65,11 @@ export function Features() {
           </p>
         </div>
         <div className="p-4 space-y-2 border-t border-border">
-          <p className="font-serif text-2xl font-medium">Dark mode</p>
+          <p className="font-serif text-2xl font-medium">Tools</p>
           <p className="text-base text-muted-foreground">
-            Conducting late night research? Full dark mode support helps reduce
-            eye strain
+            Access a suite of powerful tools including Memory Companion,
+            Academic Search, and interactive learning features to enhance your
+            workflow
           </p>
         </div>
       </div>
