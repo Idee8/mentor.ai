@@ -44,6 +44,7 @@ export function Chat({
         id,
         selectedChatModel: selectedChatModel,
         selectedFilePathnames: selectedFilePathnames,
+        group: selectedGroup,
       },
       initialMessages,
       experimental_throttle: 500,
@@ -72,7 +73,7 @@ export function Chat({
         });
       },
     }),
-    [id, selectedChatModel, selectedFilePathnames],
+    [id, selectedChatModel, selectedFilePathnames, selectedGroup],
   );
 
   const {

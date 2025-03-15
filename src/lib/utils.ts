@@ -58,26 +58,24 @@ function addToolMessageToChat({
   messages: Array<Message>;
 }): Array<Message> {
   return messages.map((message) => {
-    if (message.parts) {
+    if (message.toolInvocations) {
       return {
         ...message,
-        toolInvocations: message.parts.map((part) => {
-          if (part.type === 'tool-invocation') {
-            const toolResult = toolMessage.content.find(
-              (tool) => tool.toolCallId === part.toolInvocation.toolCallId,
-            );
+        toolInvocations: message.toolInvocations.map((toolInvocation) => {
+          const toolResult = toolMessage.content.find(
+            (tool) => tool.toolCallId === toolInvocation.toolCallId,
+          );
 
-            if (toolResult) {
-              return {
-                ...part.toolInvocation,
-                state: 'result',
-                result: toolResult.result,
-              };
-            }
-
-            return part.toolInvocation;
+          if (toolResult) {
+            return {
+              ...toolInvocation,
+              state: 'result',
+              result: toolResult.result,
+            };
           }
-        }) as ToolInvocation[],
+
+          return toolInvocation;
+        }),
       };
     }
 
@@ -90,10 +88,12 @@ export function convertToUIMessages(
 ): Array<Message> {
   return messages.reduce((chatMessages: Array<Message>, message) => {
     if (message.role === 'tool') {
-      return addToolMessageToChat({
+      const msg = addToolMessageToChat({
         toolMessage: message as CoreToolMessage,
         messages: chatMessages,
       });
+
+      return msg;
     }
 
     let textContent = '';

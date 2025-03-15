@@ -11,8 +11,6 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 export async function POST(request: Request) {
   const { email } = await request.json();
 
-  console.log(email);
-
   if (!email) {
     return Response.json(
       { error: 'Please provide your email' },

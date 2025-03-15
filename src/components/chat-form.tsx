@@ -525,6 +525,7 @@ function PureChatForm({
 export const ChatForm = memo(PureChatForm, (prevProps, nextProps) => {
   if (prevProps.status !== nextProps.status) return false;
   if (prevProps.input !== nextProps.input) return false;
+  if (prevProps.selectedGroup !== nextProps.selectedGroup) return false;
   if (prevProps.lastSubmittedQueryRef !== nextProps.lastSubmittedQueryRef)
     return false;
   if (prevProps.selectedModelId !== nextProps.selectedModelId) return false;

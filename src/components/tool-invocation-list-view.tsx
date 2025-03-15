@@ -1,17 +1,18 @@
 import type { ToolInvocation } from 'ai';
 import { memo, useCallback } from 'react';
-import { Book, Calendar, Download, FileText, User2 } from 'lucide-react';
+import { Book, Brain, Calendar, Download, FileText, User2 } from 'lucide-react';
 import { motion } from 'motion/react';
 
 import { MessageLoadingState } from './message-loading-state';
 import { Card, CardHeader, CardTitle } from './ui/card';
 import type { AcademicResult } from '@/lib/types';
 import { Button } from './ui/button';
+import MemoryManager from './memory-manager';
 
 export const ToolInvocationListView = memo(
   ({
-    message,
     toolInvocations,
+    message,
   }: { toolInvocations: ToolInvocation[]; message: any }) => {
     const renderToolInvocation = useCallback(
       (toolInvocation: ToolInvocation, index: number) => {
@@ -21,7 +22,7 @@ export const ToolInvocationListView = memo(
             ? JSON.parse(JSON.stringify(toolInvocation.result))
             : null;
 
-        if (toolInvocation.toolName === 'academic_search') {
+        if (toolInvocation.toolName === 'academicSearch') {
           if (!result) {
             return (
               <MessageLoadingState
@@ -37,7 +38,7 @@ export const ToolInvocationListView = memo(
               <CardHeader className="pb-2 flex flex-row items-center justify-between">
                 <div className="flex items-center gap-2">
                   <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-violet-500/20 to-violet-600/20 flex items-center justify-center backdrop-blur-sm">
-                    <Book className="h-4 w-4 text-violet-600 dark:text-violet-400" />
+                    <Book className="h-4 w-4 text-violet-400" />
                   </div>
                   <div>
                     <CardTitle>Academic Papers</CardTitle>
@@ -60,13 +61,13 @@ export const ToolInvocationListView = memo(
                       >
                         <div className="h-[300px] relative group overflow-y-auto">
                           <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-violet-500/20 via-violet-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                          <div className="h-full relative backdrop-blur-sm bg-background/95 dark:bg-neutral-900/95 border border-neutral-200/50 dark:border-neutral-800/50 rounded-xl p-4 flex flex-col transition-all duration-500 group-hover:border-violet-500/20">
-                            <h3 className="font-semibold text-xl tracking-tight mb-3 line-clamp-2 group-hover:text-violet-500 dark:group-hover:text-violet-400 transition-colors duration-300">
+                          <div className="h-full relative backdrop-blur-sm bg-neutral-900/95 border border-neutral-800/50 rounded-xl p-4 flex flex-col transition-all duration-500 group-hover:border-violet-500/20">
+                            <h3 className="font-semibold text-xl tracking-tight mb-3 line-clamp-2 group-hover:text-violet-400 transition-colors duration-300">
                               {paper.title}
                             </h3>
                             {paper.author && (
                               <div className="mb-3">
-                                <div className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-sm text-muted-foreground bg-neutral-100 dark:bg-neutral-800 rounded-md">
+                                <div className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-sm text-muted-foreground bg-neutral-800 rounded-md">
                                   <User2 className="h-3.5 w-3.5 text-violet-500" />
                                   <span className="line-clamp-1">
                                     {paper.author
@@ -82,7 +83,7 @@ export const ToolInvocationListView = memo(
                             )}
                             {paper.publishedDate && (
                               <div className="mb-4">
-                                <div className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-sm text-muted-foreground bg-neutral-100 dark:bg-neutral-800 rounded-md">
+                                <div className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-sm text-muted-foreground bg-neutral-800 rounded-md">
                                   <Calendar className="h-3.5 w-3.5 text-violet-500" />
                                   {new Date(
                                     paper.publishedDate,
@@ -114,7 +115,7 @@ export const ToolInvocationListView = memo(
                                       '_blank',
                                     )
                                   }
-                                  className="bg-neutral-100 dark:bg-neutral-800 hover:bg-violet-100 dark:hover:bg-violet-900/20 hover:text-violet-600 dark:hover:text-violet-400 group/btn"
+                                  className="bg-neutral-800 hover:bg-violet-900/20 hover:text-violet-400 group/btn"
                                 >
                                   <Download className="h-4 w-4 group-hover/btn:scale-110 transition-transform duration-300" />
                                 </Button>
@@ -131,6 +132,19 @@ export const ToolInvocationListView = memo(
           );
         }
 
+        if (toolInvocation.toolName === 'memoryManager') {
+          if (!result) {
+            return (
+              <MessageLoadingState
+                icon={Brain}
+                text="Managing memories..."
+                color="violet"
+              />
+            );
+          }
+          return <MemoryManager result={result} />;
+        }
+
         return null;
       },
       [message],
@@ -140,17 +154,18 @@ export const ToolInvocationListView = memo(
       <>
         {toolInvocations.map(
           (toolInvocation: ToolInvocation, toolIndex: number) => (
-            <div
-              key={`tool-${
-                // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-                toolIndex
-              }`}
-            >
+            <div key={`tool-${toolIndex}`}>
               {renderToolInvocation(toolInvocation, toolIndex)}
             </div>
           ),
         )}
       </>
+    );
+  },
+  (prevProps, nextProps) => {
+    return (
+      prevProps.toolInvocations === nextProps.toolInvocations &&
+      prevProps.message === nextProps.message
     );
   },
 );

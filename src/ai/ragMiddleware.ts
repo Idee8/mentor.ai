@@ -56,8 +56,6 @@ export const ragMiddleware: LanguageModelV1Middleware = {
       prompt: lastUserMessageContent,
     });
 
-    console.log(classification);
-
     // only use RAG for questions
     if (classification !== 'question') {
       messages.push(recentMessage);

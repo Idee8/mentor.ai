@@ -33,7 +33,6 @@ export const Providers: React.FC<{ children: React.ReactNode }> = ({
 
   useEffect(() => {
     if (isMounted !== false && data && data.user) {
-      console.log(selectedFilePathnames);
       localStorage.setItem(
         `${data.user.email}/selected-file-pathnames`,
         JSON.stringify(selectedFilePathnames),
