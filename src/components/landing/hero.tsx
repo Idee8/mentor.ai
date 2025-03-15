@@ -5,11 +5,10 @@ import { SvgGrid } from './grid';
 import { ArrowUpRight } from 'lucide-react';
 import { BlurText } from '../ui/blur-text';
 import { Button } from '../ui/button';
-import { useContext } from 'react';
-import { LandingContext } from '@/app/(landing)/provider';
+import { useRouter } from 'next/navigation';
 
 export function Hero() {
-  const { setShowRequestAccessModal } = useContext(LandingContext);
+  const { push } = useRouter();
   return (
     <div className="relative mx-auto mt-8 w-full max-w-screen-lg bg-neutral-800/40 overflow-hidden sm:rounded-2xl rounded-lg  p-6 text-center sm:p-12 sm:px-0">
       <SvgGrid />
@@ -55,7 +54,7 @@ export function Hero() {
           <Button
             className="rounded-lg"
             size={'lg'}
-            onClick={() => setShowRequestAccessModal(true)}
+            onClick={() => push('/register')}
           >
             Get started - it's free
           </Button>
