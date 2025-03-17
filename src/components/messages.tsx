@@ -294,7 +294,7 @@ function PureMessages({
                           value={input}
                           onChange={(e) => setInput(e.target.value)}
                           rows={3}
-                          className="w-full resize-none rounded-lg border border-neutral-800 bg-neutral-900 px-4 py-3 text-base text-neutral-900 dark:text-neutral-100 focus:outline-none focus:ring-2 focus:ring-primary/50"
+                          className="w-full resize-none rounded-lg border border-neutral-800 bg-neutral-900 px-4 py-3 text-base text-neutral-100 focus:outline-none focus:ring-2 focus:ring-primary/50"
                           placeholder="Edit your message..."
                         />
                       </div>
@@ -394,6 +394,12 @@ function PureMessages({
 
 export const Messages = memo(PureMessages, (prevProps, nextProps) => {
   if (prevProps.messages.length !== nextProps.messages.length) return false;
+  if (prevProps.input !== nextProps.input) return false;
+  if (prevProps.messages !== nextProps.messages) return false;
+  if (prevProps.chatId !== nextProps.chatId) return false;
+  if (prevProps.lastSubmittedQueryRef !== nextProps.lastSubmittedQueryRef)
+    return false;
+  if (prevProps.status !== nextProps.status) return false;
   if (!equal(prevProps.messages, nextProps.messages)) return false;
   if (!equal(prevProps.votes, nextProps.votes)) return false;
 
