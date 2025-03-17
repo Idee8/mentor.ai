@@ -12,8 +12,8 @@ interface RepoStats {
 }
 
 export async function fetchRepoStats(
-  owner: string = 'idee8',
-  repo: string = 'ShipFree',
+  owner = 'idee8',
+  repo = 'mentor.ai',
 ): Promise<RepoStats> {
   const headers = {
     Accept: 'application/vnd.github.v3+json',
