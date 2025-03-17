@@ -5,8 +5,8 @@ export const metadata: Metadata = {
 };
 export default async function DiscoverPage() {
   return (
-    <div>
-      <p>Discover resources</p>
+    <div className="flex w-full h-full justify-center items-center py-10">
+      <p className="text-3xl">Discover chats and documents from others.</p>
     </div>
   );
 }
