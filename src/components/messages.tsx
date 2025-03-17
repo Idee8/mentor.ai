@@ -146,7 +146,7 @@ function PureMessages({
   );
 
   const handleMessageUpdate = useCallback(
-    (e: React.FormEvent<HTMLFormElement>) => {
+    async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       if (input.trim()) {
         // Create new messages array up to the edited message
@@ -156,6 +156,15 @@ function PureMessages({
           ...newMessages[editingMessageIndex],
           content: input.trim(),
         };
+
+        const lastUserMessage = messages.findLast((m) => m.role === 'user');
+        if (!lastUserMessage) return;
+
+        // Remove the last assistant message
+        await deleteTrailingMessages({
+          id: lastUserMessage.id,
+        });
+
         // Set the new messages array
         setMessages(newMessages);
         // Reset editing state
