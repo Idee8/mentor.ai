@@ -6,6 +6,8 @@ import { OpenSourseStats } from '@/components/landing/open-source-stats';
 import { Partners } from '@/components/landing/partners';
 import { Testimonials } from '@/components/landing/testimonials';
 
+export const dynamic = 'force-dynamic';
+
 export default function Home() {
   return (
     <div>
