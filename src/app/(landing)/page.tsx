@@ -20,7 +20,7 @@ export default function Home() {
       <CTA
         description="Start tracking your link clicks and conversions in seconds and see exactly how your marketing drives revenue."
         primaryActionText="Start for free"
-        secondaryActionText="Get a Demo"
+        secondaryActionText="Get a "
         title="Supercharge your understanding"
       />
     </div>
