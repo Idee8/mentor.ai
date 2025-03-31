@@ -43,6 +43,6 @@ Ways to contribute:
 
 ## Security
 
-If you discover a security vulnerability within Mentor AI, please send an e-mail to hi@idee8.agency.
+If you discover a security vulnerability within Mentor AI, please send an e-mail to security@idee8.agency.
 
 All reports will be promptly addressed, and appropriate credit will be given.
